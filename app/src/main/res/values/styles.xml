@@ -1,0 +1,24 @@
+<resources>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/font_black_0</item>
+        <item name="colorAccent">@color/font_black_0</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:fitsSystemWindows">true</item>
+    </style>
+
+    <style name="BlogCardStyle" parent="CardView">
+        <item name="contentPadding">0dp</item>
+        <item name="cardCornerRadius">2dp</item>
+        <item name="cardPreventCornerOverlap">false</item>
+        <item name="cardElevation">3dp</item>
+    </style>
+
+    <style name="PopupWindowAnimStyle">
+        <item name="android:windowEnterAnimation">@anim/anim_pop_in</item>
+        <item name="android:windowExitAnimation">@anim/anim_pop_out</item>
+    </style>
+
+</resources>

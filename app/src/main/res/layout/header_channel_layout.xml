@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.sunfusheng.StickyHeaderListView.view.FixedGridView
+    android:id="@+id/gv_channel"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="wrap_content"
+    android:numColumns="3"
+    android:scrollbars="none"
+    android:stretchMode="columnWidth"/>

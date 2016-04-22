@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.sunfusheng.StickyHeaderListView.view.FixedGridView
+    android:id="@+id/gv_operation"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/font_black_5"
+    android:horizontalSpacing="1px"
+    android:numColumns="2"
+    android:paddingBottom="1px"
+    android:paddingTop="1px"
+    android:scrollbars="none"
+    android:verticalSpacing="1px"/>
