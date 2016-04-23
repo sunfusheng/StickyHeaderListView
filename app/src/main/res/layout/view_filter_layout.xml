@@ -2,8 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <View
@@ -15,6 +14,7 @@
         android:id="@+id/ll_head_layout"
         android:layout_width="match_parent"
         android:layout_height="45dp"
+        android:background="@color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -111,7 +111,6 @@
                 android:layout_marginLeft="5dp"
                 android:src="@mipmap/home_down_arrow"/>
         </LinearLayout>
-
     </LinearLayout>
 
     <View
@@ -120,17 +119,14 @@
         android:background="@color/font_black_5"/>
 
     <FrameLayout
-        android:id="@+id/fl_content_view"
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <View
-            android:id="@+id/view_mask"
+            android:id="@+id/view_mask_bg"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/bg_full_mask"/>
+            android:background="@color/half_transparent"/>
 
         <LinearLayout
             android:id="@+id/ll_content_list_view"
@@ -158,9 +154,6 @@
                 android:dividerHeight="0dp"
                 android:scrollbars="none"
                 android:visibility="gone"/>
-
         </LinearLayout>
-
     </FrameLayout>
-
 </LinearLayout>

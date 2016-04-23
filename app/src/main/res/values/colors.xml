@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="colorPrimary">#009688</color>
-    <color name="colorPrimaryDark">#009688</color>
-    <color name="colorAccent">#009688</color>
+    <color name="colorPrimary">#f27242</color>
+    <color name="colorPrimaryDark">#f27242</color>
+    <color name="colorAccent">#f27242</color>
 
     <!-- common -->
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="transparent">#00000000</color>
+    <color name="half_transparent">#8f000000</color>
     <color name="orange">#f27242</color>
 
     <!-- background -->

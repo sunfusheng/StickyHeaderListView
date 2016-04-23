@@ -8,13 +8,19 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.FrameLayout;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.sunfusheng.StickyHeaderListView.R;
+import com.sunfusheng.StickyHeaderListView.adapter.FilterLeftAdapter;
+import com.sunfusheng.StickyHeaderListView.adapter.FilterOneAdapter;
+import com.sunfusheng.StickyHeaderListView.adapter.FilterRightAdapter;
+import com.sunfusheng.StickyHeaderListView.model.FilterData;
+import com.sunfusheng.StickyHeaderListView.model.FilterEntity;
+import com.sunfusheng.StickyHeaderListView.model.FilterTwoEntity;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -50,16 +56,25 @@ public class FilterView extends LinearLayout implements View.OnClickListener {
     LinearLayout llHeadLayout;
     @Bind(R.id.ll_content_list_view)
     LinearLayout llContentListView;
-    @Bind(R.id.fl_content_view)
-    FrameLayout flContentView;
-    @Bind(R.id.view_mask)
-    View viewMask;
+    @Bind(R.id.view_mask_bg)
+    View viewMaskBg;
 
     private Context mContext;
+    private Activity mActivity;
     private boolean isStickyTop = false; // 是否吸附在顶部
     private boolean isShowing = false;
-    private int filterPosition;
+    private int filterPosition = -1;
     private int panelHeight;
+    private FilterData filterData;
+
+    private FilterTwoEntity selectedCategoryEntity; // 被选择的分类项
+    private FilterEntity selectedSortEntity; // 被选择的排序项
+    private FilterEntity selectedFilterEntity; // 被选择的筛选项
+
+    private FilterLeftAdapter leftAdapter;
+    private FilterRightAdapter rightAdapter;
+    private FilterOneAdapter sortAdapter;
+    private FilterOneAdapter filterAdapter;
 
     public FilterView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -86,7 +101,7 @@ public class FilterView extends LinearLayout implements View.OnClickListener {
     }
 
     private void initView() {
-        flContentView.setVisibility(GONE);
+        viewMaskBg.setVisibility(GONE);
         llContentListView.setVisibility(GONE);
     }
 
@@ -94,7 +109,7 @@ public class FilterView extends LinearLayout implements View.OnClickListener {
         llCategory.setOnClickListener(this);
         llSort.setOnClickListener(this);
         llFilter.setOnClickListener(this);
-        viewMask.setOnClickListener(this);
+        viewMaskBg.setOnClickListener(this);
         llContentListView.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -124,8 +139,8 @@ public class FilterView extends LinearLayout implements View.OnClickListener {
                     onFilterClickListener.onFilterClick(filterPosition);
                 }
                 break;
-            case R.id.view_mask:
-                resetAllStatus();
+            case R.id.view_mask_bg:
+                hide();
                 break;
         }
 
@@ -145,40 +160,122 @@ public class FilterView extends LinearLayout implements View.OnClickListener {
 
     // 复位所有的状态
     public void resetAllStatus() {
-        isShowing = false;
         resetFilterStatus();
-        flContentView.setVisibility(GONE);
-        llContentListView.setVisibility(GONE);
+        hide();
     }
 
-    // 显示动画
-    public void show(Activity activity, int position) {
+    // 显示筛选布局
+    public void showFilterLayout(int position) {
         resetFilterStatus();
         switch (position) {
             case 0:
-                tvCategory.setTextColor(activity.getResources().getColor(R.color.orange));
-                ivCategoryArrow.setImageResource(R.mipmap.home_up_arrow);
-                lvLeft.setVisibility(VISIBLE);
-                lvRight.setVisibility(VISIBLE);
+                setCategoryAdapter();
                 break;
             case 1:
-                tvSort.setTextColor(activity.getResources().getColor(R.color.orange));
-                ivSortArrow.setImageResource(R.mipmap.home_up_arrow);
-                lvLeft.setVisibility(GONE);
-                lvRight.setVisibility(VISIBLE);
+                setSortAdapter();
                 break;
             case 2:
-                tvFilter.setTextColor(activity.getResources().getColor(R.color.orange));
-                ivFilterArrow.setImageResource(R.mipmap.home_up_arrow);
-                lvLeft.setVisibility(GONE);
-                lvRight.setVisibility(VISIBLE);
+                setFilterAdapter();
                 break;
         }
 
         if (isShowing) return ;
+        show();
+    }
+
+    // 设置分类数据
+    private void setCategoryAdapter() {
+        tvCategory.setTextColor(mActivity.getResources().getColor(R.color.orange));
+        ivCategoryArrow.setImageResource(R.mipmap.home_up_arrow);
+        lvLeft.setVisibility(VISIBLE);
+        lvRight.setVisibility(VISIBLE);
+
+        if (selectedCategoryEntity == null) {
+            selectedCategoryEntity = filterData.getCategory().get(0);
+        }
+
+        // 左边列表视图
+        leftAdapter = new FilterLeftAdapter(mContext, filterData.getCategory());
+        lvLeft.setAdapter(leftAdapter);
+        leftAdapter.setSelectedEntity(selectedCategoryEntity);
+
+        lvLeft.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectedCategoryEntity = filterData.getCategory().get(position);
+                leftAdapter.setSelectedEntity(selectedCategoryEntity);
+
+                // 右边列表视图
+                rightAdapter = new FilterRightAdapter(mContext, selectedCategoryEntity.getList());
+                lvRight.setAdapter(rightAdapter);
+                lvRight.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        selectedCategoryEntity.setSelectedFilterEntity(selectedCategoryEntity.getList().get(position));
+                        rightAdapter.setSelectedEntity(selectedCategoryEntity.getSelectedFilterEntity());
+                        hide();
+                    }
+                });
+            }
+        });
+
+        // 如果右边有选中的数据，设置
+        if (selectedCategoryEntity.getSelectedFilterEntity() != null) {
+            rightAdapter = new FilterRightAdapter(mContext, selectedCategoryEntity.getList());
+        } else {
+            rightAdapter = new FilterRightAdapter(mContext, filterData.getCategory().get(0).getList());
+        }
+        lvRight.setAdapter(rightAdapter);
+        lvRight.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectedCategoryEntity.setSelectedFilterEntity(selectedCategoryEntity.getList().get(position));
+                rightAdapter.setSelectedEntity(selectedCategoryEntity.getSelectedFilterEntity());
+                hide();
+            }
+        });
+    }
+
+    // 设置排序数据
+    private void setSortAdapter() {
+        tvSort.setTextColor(mActivity.getResources().getColor(R.color.orange));
+        ivSortArrow.setImageResource(R.mipmap.home_up_arrow);
+        lvLeft.setVisibility(GONE);
+        lvRight.setVisibility(VISIBLE);
+        sortAdapter = new FilterOneAdapter(mContext, filterData.getSorts());
+        lvRight.setAdapter(sortAdapter);
+        lvRight.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectedFilterEntity = filterData.getSorts().get(position);
+                sortAdapter.setSelectedEntity(selectedFilterEntity);
+                hide();
+            }
+        });
+    }
+
+    // 设置筛选数据
+    private void setFilterAdapter() {
+        tvFilter.setTextColor(mActivity.getResources().getColor(R.color.orange));
+        ivFilterArrow.setImageResource(R.mipmap.home_up_arrow);
+        lvLeft.setVisibility(GONE);
+        lvRight.setVisibility(VISIBLE);
+        filterAdapter = new FilterOneAdapter(mContext, filterData.getFilters());
+        lvRight.setAdapter(filterAdapter);
+        lvRight.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectedSortEntity = filterData.getFilters().get(position);
+                filterAdapter.setSelectedEntity(selectedSortEntity);
+                hide();
+            }
+        });
+    }
+
+    // 动画显示
+    private void show() {
         isShowing = true;
-        flContentView.setVisibility(VISIBLE);
-        viewMask.setVisibility(VISIBLE);
+        viewMaskBg.setVisibility(VISIBLE);
         llContentListView.setVisibility(VISIBLE);
         llContentListView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -192,29 +289,32 @@ public class FilterView extends LinearLayout implements View.OnClickListener {
 
     // 隐藏动画
     public void hide() {
-        flContentView.setVisibility(GONE);
-        viewMask.setVisibility(View.GONE);
-        llContentListView.setVisibility(GONE);
-        ObjectAnimator.ofFloat(llContentListView, "translationY", 0, -panelHeight).setDuration(300).start();
+        isShowing = false;
+        resetFilterStatus();
+        viewMaskBg.setVisibility(View.GONE);
+        ObjectAnimator.ofFloat(llContentListView, "translationY", 0, -panelHeight).setDuration(200).start();
     }
 
+    // 是否吸附在顶部
     public void setStickyTop(boolean stickyTop) {
         isStickyTop = stickyTop;
-        if (isShowing && isStickyTop) {
-
-        }
     }
 
+    // 设置筛选数据
+    public void setFilterData(Activity activity, FilterData filterData) {
+        this.mActivity = activity;
+        this.filterData = filterData;
+    }
+
+    // 是否显示
     public boolean isShowing() {
         return isShowing;
     }
 
     private OnFilterClickListener onFilterClickListener;
-
     public void setOnFilterClickListener(OnFilterClickListener onFilterClickListener) {
         this.onFilterClickListener = onFilterClickListener;
     }
-
     public interface OnFilterClickListener {
         void onFilterClick(int position);
     }

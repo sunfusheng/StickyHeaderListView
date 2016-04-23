@@ -1,8 +1,10 @@
 package com.sunfusheng.StickyHeaderListView.util;
 
-import com.sunfusheng.StickyHeaderListView.model.TravelingEntity;
 import com.sunfusheng.StickyHeaderListView.model.ChannelEntity;
+import com.sunfusheng.StickyHeaderListView.model.FilterEntity;
+import com.sunfusheng.StickyHeaderListView.model.FilterTwoEntity;
 import com.sunfusheng.StickyHeaderListView.model.OperationEntity;
+import com.sunfusheng.StickyHeaderListView.model.TravelingEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,6 +74,36 @@ public class ModelUtil {
         travelingList.add(new TravelingEntity(type_scenery, "", "西班牙", 17, "http://img4.imgtn.bdimg.com/it/u=620137884,621556624&fm=21&gp=0.jpg"));
         travelingList.add(new TravelingEntity(type_building, "", "意大利", 22, "http://img0.imgtn.bdimg.com/it/u=3631118072,1530723002&fm=206&gp=0.jpg"));
         return travelingList;
+    }
+
+    // 分类数据
+    public static List<FilterTwoEntity> getCategoryData() {
+        List<FilterTwoEntity> list = new ArrayList<>();
+        list.add(new FilterTwoEntity(type_scenery, getFilterData()));
+        list.add(new FilterTwoEntity(type_building, getFilterData()));
+        list.add(new FilterTwoEntity(type_animal, getFilterData()));
+        list.add(new FilterTwoEntity(type_plant, getFilterData()));
+        return list;
+    }
+
+    // 排序数据
+    public static List<FilterEntity> getSortData() {
+        List<FilterEntity> list = new ArrayList<>();
+        list.add(new FilterEntity("排序从高到低", "1"));
+        list.add(new FilterEntity("排序从低到高", "2"));
+        return list;
+    }
+
+    // 筛选数据
+    public static List<FilterEntity> getFilterData() {
+        List<FilterEntity> list = new ArrayList<>();
+        list.add(new FilterEntity("中国", "1"));
+        list.add(new FilterEntity("美国", "2"));
+        list.add(new FilterEntity("英国", "3"));
+        list.add(new FilterEntity("德国", "4"));
+        list.add(new FilterEntity("西班牙", "5"));
+        list.add(new FilterEntity("意大利", "6"));
+        return list;
     }
 
 

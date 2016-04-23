@@ -3,6 +3,8 @@ package com.sunfusheng.StickyHeaderListView;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AbsListView;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 
 import com.sunfusheng.StickyHeaderListView.adapter.TravelingAdapter;
 import com.sunfusheng.StickyHeaderListView.model.ChannelEntity;
+import com.sunfusheng.StickyHeaderListView.model.FilterData;
 import com.sunfusheng.StickyHeaderListView.model.OperationEntity;
 import com.sunfusheng.StickyHeaderListView.model.TravelingEntity;
 import com.sunfusheng.StickyHeaderListView.util.ColorUtil;
@@ -54,11 +57,12 @@ public class MainActivity extends AppCompatActivity {
     private HeaderOperationViewView headerOperationViewView; // 运营视图
     private HeaderDividerViewView headerDividerViewView; // 分割线占位图
     private HeaderFilterViewView headerFilterViewView; // 分类筛选视图
+    private FilterData filterData; // 筛选数据
 
     private boolean isStickyTop = false; // 是否吸附在顶部
     private boolean isSmooth = false; // 没有吸附的前提下，是否在滑动
     private int titleViewHeight = 50; // 标题栏的高度
-    private int filterPosition;
+    private int filterPosition = -1;
 
     private int adViewHeight = 180; // 广告视图的高度
     private int adViewTopSpace; // 广告视图距离顶部的距离
@@ -66,6 +70,13 @@ public class MainActivity extends AppCompatActivity {
     private int filterViewPosition = 4; // 筛选视图的位置
     private int filterViewHeight = 46; // 筛选视图的高度
     private int filterViewTopSpace; // 筛选视图距离顶部的距离
+
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+        }
+    };
 
 
     @Override
@@ -83,6 +94,12 @@ public class MainActivity extends AppCompatActivity {
         mContext = this;
         mActivity = this;
 
+        // 筛选数据
+        filterData = new FilterData();
+        filterData.setCategory(ModelUtil.getCategoryData());
+        filterData.setSorts(ModelUtil.getSortData());
+        filterData.setFilters(ModelUtil.getFilterData());
+
         // 广告数据
         adList = ModelUtil.getAdData();
 
@@ -98,6 +115,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void initView() {
         fvTopFilter.setVisibility(View.INVISIBLE);
+
+        // 设置筛选数据
+        fvTopFilter.setFilterData(mActivity, filterData);
 
         // 设置广告数据
         listViewAdHeaderView = new HeaderAdViewView(this);
@@ -157,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if (isSmooth && isStickyTop) {
                     isSmooth = false;
-                    fvTopFilter.show(mActivity, filterPosition);
+                    fvTopFilter.showFilterLayout(filterPosition);
                 }
 
                 fvTopFilter.setStickyTop(isStickyTop);
@@ -182,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
             public void onFilterClick(int position) {
                 if (isStickyTop) {
                     filterPosition = position;
-                    fvTopFilter.show(mActivity, position);
+                    fvTopFilter.showFilterLayout(position);
                 }
             }
         });

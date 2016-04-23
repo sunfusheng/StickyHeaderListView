@@ -2,8 +2,7 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/bg">
+    android:layout_height="match_parent">
 
     <ListView
         android:id="@+id/listView"
@@ -29,9 +28,9 @@
                 android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="StickyHeaderListView"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="30dp"
+                android:text="StickyHeaderListView"
                 android:textColor="@color/orange"
                 android:textSize="18sp"/>
         </RelativeLayout>
@@ -40,7 +39,6 @@
             android:id="@+id/fv_top_filter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
             android:visibility="visible"/>
     </LinearLayout>
 
