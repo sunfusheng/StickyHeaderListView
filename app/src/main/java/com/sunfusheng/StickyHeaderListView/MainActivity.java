@@ -56,7 +56,9 @@ public class MainActivity extends AppCompatActivity {
     private HeaderFilterViewView headerFilterViewView; // 分类筛选视图
 
     private boolean isStickyTop = false; // 是否吸附在顶部
+    private boolean isSmooth = false; // 没有吸附的前提下，是否在滑动
     private int titleViewHeight = 50; // 标题栏的高度
+    private int filterPosition;
 
     private int adViewHeight = 180; // 广告视图的高度
     private int adViewTopSpace; // 广告视图距离顶部的距离
@@ -122,7 +124,6 @@ public class MainActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
 
         filterViewPosition = listView.getHeaderViewsCount() - 1;
-//        fvTopFilter.setSomeData(this, 0);
     }
 
     private void initListener() {
@@ -154,6 +155,13 @@ public class MainActivity extends AppCompatActivity {
                     fvTopFilter.setVisibility(View.VISIBLE);
                 }
 
+                if (isSmooth && isStickyTop) {
+                    isSmooth = false;
+                    fvTopFilter.show(mActivity, filterPosition);
+                }
+
+                fvTopFilter.setStickyTop(isStickyTop);
+
                 // 处理标题栏颜色渐变
                 handleTitleBarColorEvaluate();
             }
@@ -161,17 +169,20 @@ public class MainActivity extends AppCompatActivity {
 
         headerFilterViewView.setOnFilterClickListener(new HeaderFilterViewView.OnFilterClickListener() {
             @Override
-            public void onFilterClick(int position, boolean isShow) {
+            public void onFilterClick(int position) {
                 if (!isStickyTop) {
+                    filterPosition = position;
+                    isSmooth = true;
                     listView.smoothScrollToPositionFromTop(filterViewPosition, DensityUtil.dip2px(mContext, titleViewHeight));
                 }
             }
         });
         fvTopFilter.setOnFilterClickListener(new FilterView.OnFilterClickListener() {
             @Override
-            public void onFilterClick(int position, boolean isShow) {
+            public void onFilterClick(int position) {
                 if (isStickyTop) {
-                    fvTopFilter.show(mActivity);
+                    filterPosition = position;
+                    fvTopFilter.show(mActivity, position);
                 }
             }
         });
@@ -193,6 +204,15 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         if (listViewAdHeaderView != null) {
             listViewAdHeaderView.stopADRotate();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!fvTopFilter.isShowing()) {
+            super.onBackPressed();
+        } else {
+            fvTopFilter.resetAllStatus();
         }
     }
 }

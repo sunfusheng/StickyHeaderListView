@@ -40,9 +40,9 @@ public class HeaderFilterViewView extends HeaderViewInterface<Object> implements
     }
 
     @Override
-    public void onFilterClick(int position, boolean isShow) {
+    public void onFilterClick(int position) {
         if (onFilterClickListener != null) {
-            onFilterClickListener.onFilterClick(position, isShow);
+            onFilterClickListener.onFilterClick(position);
         }
     }
 
@@ -51,7 +51,7 @@ public class HeaderFilterViewView extends HeaderViewInterface<Object> implements
         this.onFilterClickListener = onFilterClickListener;
     }
     public interface OnFilterClickListener {
-        void onFilterClick(int position, boolean isShow);
+        void onFilterClick(int position);
     }
 
 }
