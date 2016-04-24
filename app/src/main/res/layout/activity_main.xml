@@ -24,15 +24,50 @@
             android:background="@color/transparent"
             android:visibility="visible">
 
-            <TextView
-                android:id="@+id/tv_title"
-                android:layout_width="wrap_content"
+            <FrameLayout
+                android:layout_width="190dp"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="30dp"
-                android:text="StickyHeaderListView"
-                android:textColor="@color/orange"
-                android:textSize="18sp"/>
+                android:layout_marginLeft="15dp">
+
+                <View
+                    android:id="@+id/view_title_bg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/xml_oval_half_transparent_bg"/>
+
+                <TextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="StickyHeaderListView"
+                    android:textColor="@color/white"
+                    android:textSize="17sp"/>
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/fl_action_more"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="15dp">
+
+                <View
+                    android:id="@+id/view_action_more_bg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/xml_oval_half_transparent_bg"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:src="@mipmap/ic_action_more"/>
+            </FrameLayout>
         </RelativeLayout>
 
         <com.sunfusheng.StickyHeaderListView.view.FilterView

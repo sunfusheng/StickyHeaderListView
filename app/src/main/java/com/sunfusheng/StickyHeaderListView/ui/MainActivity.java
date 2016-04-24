@@ -1,17 +1,20 @@
-package com.sunfusheng.StickyHeaderListView;
+package com.sunfusheng.StickyHeaderListView.ui;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.sunfusheng.StickyHeaderListView.R;
 import com.sunfusheng.StickyHeaderListView.adapter.TravelingAdapter;
 import com.sunfusheng.StickyHeaderListView.model.ChannelEntity;
 import com.sunfusheng.StickyHeaderListView.model.FilterData;
@@ -43,6 +46,12 @@ public class MainActivity extends AppCompatActivity {
     RelativeLayout rlBar;
     @Bind(R.id.tv_title)
     TextView tvTitle;
+    @Bind(R.id.view_title_bg)
+    View viewTitleBg;
+    @Bind(R.id.view_action_more_bg)
+    View viewActionMoreBg;
+    @Bind(R.id.fl_action_more)
+    FrameLayout flActionMore;
 
     private Context mContext;
     private Activity mActivity;
@@ -68,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
     private int adViewTopSpace; // 广告视图距离顶部的距离
 
     private int filterViewPosition = 4; // 筛选视图的位置
-    private int filterViewHeight = 46; // 筛选视图的高度
     private int filterViewTopSpace; // 筛选视图距离顶部的距离
 
     private Handler mHandler = new Handler() {
@@ -77,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
             super.handleMessage(msg);
         }
     };
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,7 +170,6 @@ public class MainActivity extends AppCompatActivity {
                 View filterView = listView.getChildAt(filterViewPosition - firstVisibleItem);
                 if (filterView != null) {
                     filterViewTopSpace = DensityUtil.px2dip(mContext, filterView.getTop());
-                    filterViewHeight = DensityUtil.px2dip(mContext, filterView.getHeight());
                 }
 
                 // 处理筛选是否吸附在顶部
@@ -206,6 +212,13 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        flActionMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(mActivity, AboutActivity.class));
+            }
+        });
     }
 
     // 处理标题栏颜色渐变
@@ -215,8 +228,9 @@ public class MainActivity extends AppCompatActivity {
         if (fraction > 1.0f) {
             fraction = 1.0f;
         }
+        viewTitleBg.setAlpha(1.0f - fraction);
+        viewActionMoreBg.setAlpha(1.0f - fraction);
         rlBar.setBackgroundColor(ColorUtil.getNewColorByStartEndColor(mContext, fraction, R.color.transparent, R.color.orange));
-        tvTitle.setTextColor(ColorUtil.getNewColorByStartEndColor(mContext, fraction, R.color.orange, R.color.white));
     }
 
     @Override
