@@ -5,13 +5,17 @@ import java.io.Serializable;
 /**
  * Created by sunfusheng on 16/4/20.
  */
-public class TravelingEntity implements Serializable {
+public class TravelingEntity implements Serializable, Comparable<TravelingEntity> {
 
     private String type; // 风景、动物、植物、建筑
     private String title; // 标题
     private String from; // 来源
     private int rank; // 排名
     private String image_url; // 图片地址
+
+    // 暂无数据属性
+    private boolean isNoData = false;
+    private int height;
 
     public TravelingEntity() {
     }
@@ -22,6 +26,22 @@ public class TravelingEntity implements Serializable {
         this.from = from;
         this.rank = rank;
         this.image_url = image_url;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public boolean isNoData() {
+        return isNoData;
+    }
+
+    public void setNoData(boolean noData) {
+        isNoData = noData;
     }
 
     public String getTitle() {
@@ -62,5 +82,10 @@ public class TravelingEntity implements Serializable {
 
     public void setImage_url(String image_url) {
         this.image_url = image_url;
+    }
+
+    @Override
+    public int compareTo(TravelingEntity another) {
+        return this.getRank() - another.getRank();
     }
 }

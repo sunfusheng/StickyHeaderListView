@@ -38,9 +38,9 @@ public class DensityUtil {
     }
 
     // 屏幕高度（像素）
-    public static int getWindowHeight(Activity context){
+    public static int getWindowHeight(Activity activity){
         DisplayMetrics metric = new DisplayMetrics();
-        context.getWindowManager().getDefaultDisplay().getMetrics(metric);
+        activity.getWindowManager().getDefaultDisplay().getMetrics(metric);
         return metric.heightPixels;
     }
 }

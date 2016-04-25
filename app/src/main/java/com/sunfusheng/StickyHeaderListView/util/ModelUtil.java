@@ -5,11 +5,16 @@ import com.sunfusheng.StickyHeaderListView.model.FilterEntity;
 import com.sunfusheng.StickyHeaderListView.model.FilterTwoEntity;
 import com.sunfusheng.StickyHeaderListView.model.OperationEntity;
 import com.sunfusheng.StickyHeaderListView.model.TravelingEntity;
+import com.sunfusheng.StickyHeaderListView.model.TravelingEntityComparator;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
+ * 好吧，让你找到了，这是假的数据源
+ *
  * Created by sunfusheng on 16/4/22.
  */
 public class ModelUtil {
@@ -106,5 +111,53 @@ public class ModelUtil {
         return list;
     }
 
+    // ListView分类数据
+    public static List<TravelingEntity> getCategoryTravelingData(FilterTwoEntity entity) {
+        List<TravelingEntity> list = getTravelingData();
+        List<TravelingEntity> travelingList = new ArrayList<>();
+        int size = list.size();
+        for (int i=0; i<size; i++) {
+            if (list.get(i).getType().equals(entity.getType()) &&
+                    list.get(i).getFrom().equals(entity.getSelectedFilterEntity().getKey())) {
+                travelingList.add(list.get(i));
+            }
+        }
+        return travelingList;
+    }
+
+    // ListView排序数据
+    public static List<TravelingEntity> getSortTravelingData(FilterEntity entity) {
+        List<TravelingEntity> list = getTravelingData();
+        Comparator<TravelingEntity> ascComparator = new TravelingEntityComparator();
+        if (entity.getKey().equals("排序从高到低")) {
+            Collections.sort(list);
+        } else {
+            Collections.sort(list, ascComparator);
+        }
+        return list;
+    }
+
+    // ListView筛选数据
+    public static List<TravelingEntity> getFilterTravelingData(FilterEntity entity) {
+        List<TravelingEntity> list = getTravelingData();
+        List<TravelingEntity> travelingList = new ArrayList<>();
+        int size = list.size();
+        for (int i=0; i<size; i++) {
+            if (list.get(i).getFrom().equals(entity.getKey())) {
+                travelingList.add(list.get(i));
+            }
+        }
+        return travelingList;
+    }
+
+    // 暂无数据
+    public static List<TravelingEntity> getNoDataEntity(int height) {
+        List<TravelingEntity> list = new ArrayList<>();
+        TravelingEntity entity = new TravelingEntity();
+        entity.setNoData(true);
+        entity.setHeight(height);
+        list.add(entity);
+        return list;
+    }
 
 }

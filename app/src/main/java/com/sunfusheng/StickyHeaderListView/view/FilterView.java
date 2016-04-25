@@ -214,6 +214,9 @@ public class FilterView extends LinearLayout implements View.OnClickListener {
                         selectedCategoryEntity.setSelectedFilterEntity(selectedCategoryEntity.getList().get(position));
                         rightAdapter.setSelectedEntity(selectedCategoryEntity.getSelectedFilterEntity());
                         hide();
+                        if (onItemCategoryClickListener != null) {
+                            onItemCategoryClickListener.onItemCategoryClick(selectedCategoryEntity);
+                        }
                     }
                 });
             }
@@ -232,6 +235,9 @@ public class FilterView extends LinearLayout implements View.OnClickListener {
                 selectedCategoryEntity.setSelectedFilterEntity(selectedCategoryEntity.getList().get(position));
                 rightAdapter.setSelectedEntity(selectedCategoryEntity.getSelectedFilterEntity());
                 hide();
+                if (onItemCategoryClickListener != null) {
+                    onItemCategoryClickListener.onItemCategoryClick(selectedCategoryEntity);
+                }
             }
         });
     }
@@ -247,9 +253,12 @@ public class FilterView extends LinearLayout implements View.OnClickListener {
         lvRight.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectedFilterEntity = filterData.getSorts().get(position);
-                sortAdapter.setSelectedEntity(selectedFilterEntity);
+                selectedSortEntity = filterData.getSorts().get(position);
+                sortAdapter.setSelectedEntity(selectedSortEntity);
                 hide();
+                if (onItemSortClickListener != null) {
+                    onItemSortClickListener.onItemSortClick(selectedSortEntity);
+                }
             }
         });
     }
@@ -265,9 +274,12 @@ public class FilterView extends LinearLayout implements View.OnClickListener {
         lvRight.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectedSortEntity = filterData.getFilters().get(position);
-                filterAdapter.setSelectedEntity(selectedSortEntity);
+                selectedFilterEntity = filterData.getFilters().get(position);
+                filterAdapter.setSelectedEntity(selectedFilterEntity);
                 hide();
+                if (onItemFilterClickListener != null) {
+                    onItemFilterClickListener.onItemFilterClick(selectedFilterEntity);
+                }
             }
         });
     }
@@ -311,12 +323,40 @@ public class FilterView extends LinearLayout implements View.OnClickListener {
         return isShowing;
     }
 
+    // 筛选视图点击
     private OnFilterClickListener onFilterClickListener;
     public void setOnFilterClickListener(OnFilterClickListener onFilterClickListener) {
         this.onFilterClickListener = onFilterClickListener;
     }
     public interface OnFilterClickListener {
         void onFilterClick(int position);
+    }
+
+    // 分类Item点击
+    private OnItemCategoryClickListener onItemCategoryClickListener;
+    public void setOnItemCategoryClickListener(OnItemCategoryClickListener onItemCategoryClickListener) {
+        this.onItemCategoryClickListener = onItemCategoryClickListener;
+    }
+    public interface OnItemCategoryClickListener {
+        void onItemCategoryClick(FilterTwoEntity entity);
+    }
+
+    // 排序Item点击
+    private OnItemSortClickListener onItemSortClickListener;
+    public void setOnItemSortClickListener(OnItemSortClickListener onItemSortClickListener) {
+        this.onItemSortClickListener = onItemSortClickListener;
+    }
+    public interface OnItemSortClickListener {
+        void onItemSortClick(FilterEntity entity);
+    }
+
+    // 筛选Item点击
+    private OnItemFilterClickListener onItemFilterClickListener;
+    public void setOnItemFilterClickListener(OnItemFilterClickListener onItemFilterClickListener) {
+        this.onItemFilterClickListener = onItemFilterClickListener;
+    }
+    public interface OnItemFilterClickListener {
+        void onItemFilterClick(FilterEntity entity);
     }
 
 }

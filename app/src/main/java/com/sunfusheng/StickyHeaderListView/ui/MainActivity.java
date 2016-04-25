@@ -18,6 +18,8 @@ import com.sunfusheng.StickyHeaderListView.R;
 import com.sunfusheng.StickyHeaderListView.adapter.TravelingAdapter;
 import com.sunfusheng.StickyHeaderListView.model.ChannelEntity;
 import com.sunfusheng.StickyHeaderListView.model.FilterData;
+import com.sunfusheng.StickyHeaderListView.model.FilterEntity;
+import com.sunfusheng.StickyHeaderListView.model.FilterTwoEntity;
 import com.sunfusheng.StickyHeaderListView.model.OperationEntity;
 import com.sunfusheng.StickyHeaderListView.model.TravelingEntity;
 import com.sunfusheng.StickyHeaderListView.util.ColorUtil;
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Context mContext;
     private Activity mActivity;
+    private int mScreenHeight; // 屏幕高度
 
     private List<String> adList = new ArrayList<>(); // 广告数据
     private List<ChannelEntity> channelList = new ArrayList<>(); // 频道数据
@@ -67,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
     private HeaderDividerViewView headerDividerViewView; // 分割线占位图
     private HeaderFilterViewView headerFilterViewView; // 分类筛选视图
     private FilterData filterData; // 筛选数据
+    private TravelingAdapter mAdapter;
 
     private boolean isStickyTop = false; // 是否吸附在顶部
     private boolean isSmooth = false; // 没有吸附的前提下，是否在滑动
@@ -100,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
     private void initData() {
         mContext = this;
         mActivity = this;
+        mScreenHeight = DensityUtil.getWindowHeight(this);
 
         // 筛选数据
         filterData = new FilterData();
@@ -147,8 +152,8 @@ public class MainActivity extends AppCompatActivity {
         headerFilterViewView.fillView(new Object(), listView);
 
         // 设置ListView数据
-        TravelingAdapter adapter = new TravelingAdapter(this, travelingList);
-        listView.setAdapter(adapter);
+        mAdapter = new TravelingAdapter(this, travelingList);
+        listView.setAdapter(mAdapter);
 
         filterViewPosition = listView.getHeaderViewsCount() - 1;
     }
@@ -193,6 +198,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // (真正的)筛选视图点击
         headerFilterViewView.setOnFilterClickListener(new HeaderFilterViewView.OnFilterClickListener() {
             @Override
             public void onFilterClick(int position) {
@@ -203,6 +209,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        // (ListView头部展示的)筛选视图点击
         fvTopFilter.setOnFilterClickListener(new FilterView.OnFilterClickListener() {
             @Override
             public void onFilterClick(int position) {
@@ -213,10 +221,47 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // 关于
         flActionMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(mActivity, AboutActivity.class));
+            }
+        });
+
+        // 分类Item点击
+        fvTopFilter.setOnItemCategoryClickListener(new FilterView.OnItemCategoryClickListener() {
+            @Override
+            public void onItemCategoryClick(FilterTwoEntity entity) {
+                List<TravelingEntity> list = ModelUtil.getCategoryTravelingData(entity);
+                if (list == null || list.size() == 0) {
+                    int height = mScreenHeight - DensityUtil.dip2px(mContext, 95);
+                    mAdapter.setData(ModelUtil.getNoDataEntity(height));
+                } else {
+                    mAdapter.setData(list);
+                }
+            }
+        });
+
+        // 排序Item点击
+        fvTopFilter.setOnItemSortClickListener(new FilterView.OnItemSortClickListener() {
+            @Override
+            public void onItemSortClick(FilterEntity entity) {
+                mAdapter.setData(ModelUtil.getSortTravelingData(entity));
+            }
+        });
+
+        // 筛选Item点击
+        fvTopFilter.setOnItemFilterClickListener(new FilterView.OnItemFilterClickListener() {
+            @Override
+            public void onItemFilterClick(FilterEntity entity) {
+                List<TravelingEntity> list = ModelUtil.getFilterTravelingData(entity);
+                if (list == null || list.size() == 0) {
+                    int height = mScreenHeight - DensityUtil.dip2px(mContext, 95);
+                    mAdapter.setData(ModelUtil.getNoDataEntity(height));
+                } else {
+                    mAdapter.setData(list);
+                }
             }
         });
     }

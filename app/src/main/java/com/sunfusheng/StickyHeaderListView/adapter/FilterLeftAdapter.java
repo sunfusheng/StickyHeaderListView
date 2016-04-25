@@ -33,7 +33,7 @@ public class FilterLeftAdapter extends BaseListAdapter<FilterTwoEntity> {
     public void setSelectedEntity(FilterTwoEntity filterEntity) {
         this.selectedEntity = filterEntity;
         for (FilterTwoEntity entity : getData()) {
-            entity.setSelected(entity.getTitle().equals(selectedEntity.getTitle()));
+            entity.setSelected(entity.getType().equals(selectedEntity.getType()));
         }
         notifyDataSetChanged();
     }
@@ -51,7 +51,7 @@ public class FilterLeftAdapter extends BaseListAdapter<FilterTwoEntity> {
 
         FilterTwoEntity entity = getItem(position);
 
-        holder.tvTitle.setText(entity.getTitle());
+        holder.tvTitle.setText(entity.getType());
         if (entity.isSelected()) {
             holder.tvTitle.setTextColor(mContext.getResources().getColor(R.color.orange));
             holder.llRootView.setBackgroundColor(mContext.getResources().getColor(R.color.white));
