@@ -33,6 +33,8 @@ StickyHeaderListView 是基于实际需求做出的灵活可定制的UI功能，
     </tr>
 </table>
 
+### [实现思路参考简书文章](http://www.jianshu.com/p/3bf26722c489)
+
 ### [APK下载地址](http://fir.im/StickyListView)
 
 ### 关于我
