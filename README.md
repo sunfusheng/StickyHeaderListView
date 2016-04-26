@@ -10,10 +10,15 @@ StickyHeaderListView 是基于实际需求做出的灵活可定制的UI功能，
 六、数据不足一屏动态添加空数据占位。<br/>
 七、数据为空时，ListView加载暂无数据视图。<br/>
 八、思路清晰、界面优美，添加ripple点击效果。<br/>
+九、支持下拉刷新和上拉加载更多功能。<br/>
 
 ### 动态效果图
 
 <img src="/screenshots/stickyheader.gif" style="width: 30%;"/>
+
+<br/>
+
+<img src="/screenshots/stickyheader2.gif" style="width: 30%;"/>
 
 ### 截图
 
