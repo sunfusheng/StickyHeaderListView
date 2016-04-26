@@ -1,7 +1,35 @@
 
 ### StickyHeaderListView
 
-ListView 吸附悬停，动态添加头部View，标题栏颜色渐变，广告无限循环，筛选分类等
+StickyHeaderListView 是基于实际需求做出的灵活可定制的UI功能，具体实现功能如下：
+一、支持无限循环的广告位。
+二、高度可动态配置的Header2和Header3（使用GridView实现）。
+三、主要功能：分类、排序和筛选布局滑动到顶部后吸附、悬停。
+四、自定义FilterView筛选控件，支持动画显示与动画隐藏。
+五、支持标题栏背景颜色渐变、字体颜色渐变。
+六、数据不足一屏动态添加空数据占位。
+七、数据为空时，ListView加载暂无数据视图。
+八、思路清晰、界面优美，添加ripple点击效果。
+
+<img src="/screenshots/stickyheader.gif" style="width: 50%;"/>
+
+<table>
+    <tr>
+        <td><img src="/screenshots/StickyHeaderListView2.png" style="width: 50%;"></td>
+        <td><img src="/screenshots/StickyHeaderListView3.png" style="width: 50%;"></td>
+    </tr>
+</table>
+
+<br/>
+
+<table>
+    <tr>
+        <td><img src="/screenshots/StickyHeaderListView4.png" style="width: 50%;"></td>
+        <td><img src="/screenshots/StickyHeaderListView5.png" style="width: 50%;"></td>
+    </tr>
+</table>
+
+### [APK下载地址](http://fir.im/StickyListView)
 
 ### 关于我
 
