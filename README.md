@@ -11,12 +11,16 @@ StickyHeaderListView 是基于实际需求做出的灵活可定制的UI功能，
 七、数据为空时，ListView加载暂无数据视图。
 八、思路清晰、界面优美，添加ripple点击效果。
 
-<img src="/screenshots/stickyheader.gif" style="width: 50%;"/>
+### 动态效果图
+
+<img src="/screenshots/stickyheader.gif" style="width: 30%;"/>
+
+### 截图
 
 <table>
     <tr>
-        <td><img src="/screenshots/StickyHeaderListView2.png" style="width: 50%;"></td>
-        <td><img src="/screenshots/StickyHeaderListView3.png" style="width: 50%;"></td>
+        <td><img src="/screenshots/StickyHeaderListView2.png" style="width: 30%;"></td>
+        <td><img src="/screenshots/StickyHeaderListView3.png" style="width: 30%;"></td>
     </tr>
 </table>
 
@@ -24,8 +28,8 @@ StickyHeaderListView 是基于实际需求做出的灵活可定制的UI功能，
 
 <table>
     <tr>
-        <td><img src="/screenshots/StickyHeaderListView4.png" style="width: 50%;"></td>
-        <td><img src="/screenshots/StickyHeaderListView5.png" style="width: 50%;"></td>
+        <td><img src="/screenshots/StickyHeaderListView4.png" style="width: 30%;"></td>
+        <td><img src="/screenshots/StickyHeaderListView5.png" style="width: 30%;"></td>
     </tr>
 </table>
 
