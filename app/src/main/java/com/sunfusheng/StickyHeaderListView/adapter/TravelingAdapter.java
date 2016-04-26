@@ -2,9 +2,9 @@ package com.sunfusheng.StickyHeaderListView.adapter;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -69,8 +69,8 @@ public class TravelingAdapter extends BaseListAdapter<TravelingEntity> {
     public View getView(int position, View convertView, ViewGroup parent) {
         // 暂无数据
         if (isNoData) {
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_no_data_layout, null);
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, mHeight);
+            convertView = mInflater.inflate(R.layout.item_no_data_layout, null);
+            AbsListView.LayoutParams params = new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, mHeight);
             RelativeLayout rootView = ButterKnife.findById(convertView, R.id.rl_root_view);
             rootView.setLayoutParams(params);
             return convertView;
@@ -81,7 +81,7 @@ public class TravelingAdapter extends BaseListAdapter<TravelingEntity> {
         if (convertView != null && convertView instanceof LinearLayout) {
             holder = (ViewHolder) convertView.getTag();
         } else {
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_travel, null);
+            convertView = mInflater.inflate(R.layout.item_travel, null);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         }
