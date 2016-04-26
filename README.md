@@ -1,7 +1,7 @@
 
 ### StickyHeaderListView
 
-StickyHeaderListView 是基于实际需求做出的灵活可定制的UI功能，具体实现功能如下：
+StickyHeaderListView 是基于实际需求做出的灵活可定制的UI功能，具体实现功能如下：<br/>
 一、支持无限循环的广告位。<br/>
 二、高度可动态配置的Header2和Header3（使用GridView实现）。<br/>
 三、主要功能：分类、排序和筛选布局滑动到顶部后吸附、悬停。<br/>
