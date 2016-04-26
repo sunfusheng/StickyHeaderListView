@@ -7,10 +7,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.FrameLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -31,6 +31,7 @@ import com.sunfusheng.StickyHeaderListView.view.HeaderChannelViewView;
 import com.sunfusheng.StickyHeaderListView.view.HeaderDividerViewView;
 import com.sunfusheng.StickyHeaderListView.view.HeaderFilterViewView;
 import com.sunfusheng.StickyHeaderListView.view.HeaderOperationViewView;
+import com.sunfusheng.StickyHeaderListView.view.SmoothListView.SmoothListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,10 +39,10 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SmoothListView.ISmoothListViewListener {
 
     @Bind(R.id.listView)
-    ListView listView;
+    SmoothListView smoothListView;
     @Bind(R.id.fv_top_filter)
     FilterView fvTopFilter;
     @Bind(R.id.rl_bar)
@@ -133,46 +134,55 @@ public class MainActivity extends AppCompatActivity {
 
         // 设置广告数据
         listViewAdHeaderView = new HeaderAdViewView(this);
-        listViewAdHeaderView.fillView(adList, listView);
+        listViewAdHeaderView.fillView(adList, smoothListView);
 
         // 设置频道数据
         headerChannelView = new HeaderChannelViewView(this);
-        headerChannelView.fillView(channelList, listView);
+        headerChannelView.fillView(channelList, smoothListView);
 
         // 设置运营数据
         headerOperationViewView = new HeaderOperationViewView(this);
-        headerOperationViewView.fillView(operationList, listView);
+        headerOperationViewView.fillView(operationList, smoothListView);
 
         // 设置分割线
         headerDividerViewView = new HeaderDividerViewView(this);
-        headerDividerViewView.fillView("", listView);
+        headerDividerViewView.fillView("", smoothListView);
 
         // 设置筛选数据
         headerFilterViewView = new HeaderFilterViewView(this);
-        headerFilterViewView.fillView(new Object(), listView);
+        headerFilterViewView.fillView(new Object(), smoothListView);
 
         // 设置ListView数据
         mAdapter = new TravelingAdapter(this, travelingList);
-        listView.setAdapter(mAdapter);
+        smoothListView.setAdapter(mAdapter);
 
-        filterViewPosition = listView.getHeaderViewsCount() - 1;
+        filterViewPosition = smoothListView.getHeaderViewsCount() - 1;
     }
 
     private void initListener() {
-        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+        smoothListView.setRefreshEnable(true);
+        smoothListView.setLoadMoreEnable(true);
+        smoothListView.setSmoothListViewListener(this);
+        smoothListView.setOnScrollListener(new SmoothListView.OnSmoothScrollListener() {
+            @Override
+            public void onSmoothScrolling(View view) {
+
+            }
+
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
+
             }
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                View adView = listView.getChildAt(0 - firstVisibleItem);
+                View adView = smoothListView.getChildAt(1 - firstVisibleItem);
                 if (adView != null) {
                     adViewTopSpace = DensityUtil.px2dip(mContext, adView.getTop());
                     adViewHeight = DensityUtil.px2dip(mContext, adView.getHeight());
                 }
 
-                View filterView = listView.getChildAt(filterViewPosition - firstVisibleItem);
+                View filterView = smoothListView.getChildAt(filterViewPosition - firstVisibleItem);
                 if (filterView != null) {
                     filterViewTopSpace = DensityUtil.px2dip(mContext, filterView.getTop());
                 }
@@ -205,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
                 if (!isStickyTop) {
                     filterPosition = position;
                     isSmooth = true;
-                    listView.smoothScrollToPositionFromTop(filterViewPosition, DensityUtil.dip2px(mContext, titleViewHeight));
+                    smoothListView.smoothScrollToPositionFromTop(filterViewPosition, DensityUtil.dip2px(mContext, titleViewHeight));
                 }
             }
         });
@@ -234,7 +244,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemCategoryClick(FilterTwoEntity entity) {
                 List<TravelingEntity> list = ModelUtil.getCategoryTravelingData(entity);
-                if (list == null || list.size() == 0) {
+                if (list.size() < TravelingAdapter.ONE_SCREEN_COUNT) {
+                    smoothListView.setLoadMoreEnable(false);
+                }
+                if (list.size() == 0) {
                     int height = mScreenHeight - DensityUtil.dip2px(mContext, 95);
                     mAdapter.setData(ModelUtil.getNoDataEntity(height));
                 } else {
@@ -256,7 +269,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemFilterClick(FilterEntity entity) {
                 List<TravelingEntity> list = ModelUtil.getFilterTravelingData(entity);
-                if (list == null || list.size() == 0) {
+                if (list.size() < TravelingAdapter.ONE_SCREEN_COUNT) {
+                    smoothListView.setLoadMoreEnable(false);
+                }
+                if (list.size() == 0) {
                     int height = mScreenHeight - DensityUtil.dip2px(mContext, 95);
                     mAdapter.setData(ModelUtil.getNoDataEntity(height));
                 } else {
@@ -268,8 +284,16 @@ public class MainActivity extends AppCompatActivity {
 
     // 处理标题栏颜色渐变
     private void handleTitleBarColorEvaluate() {
+        Log.d("--->", "adViewTopSpace: "+adViewTopSpace);
+        float fraction;
+        if (adViewTopSpace > 0) {
+            fraction = adViewTopSpace * 1f / 60;
+            rlBar.setAlpha(1.0f - fraction);
+            return ;
+        }
+        rlBar.setAlpha(1.0f);
         float space = Math.abs(adViewTopSpace) * 1f;
-        float fraction = space / (adViewHeight - titleViewHeight);
+        fraction = space / (adViewHeight - titleViewHeight);
         if (fraction > 1.0f) {
             fraction = 1.0f;
         }
@@ -293,5 +317,26 @@ public class MainActivity extends AppCompatActivity {
         } else {
             fvTopFilter.resetAllStatus();
         }
+    }
+
+    @Override
+    public void onRefresh() {
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                smoothListView.stopRefresh();
+                smoothListView.setRefreshTime("刚刚");
+            }
+        }, 2000);
+    }
+
+    @Override
+    public void onLoadMore() {
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                smoothListView.stopLoadMore();
+            }
+        }, 2000);
     }
 }

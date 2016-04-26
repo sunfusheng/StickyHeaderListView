@@ -27,6 +27,7 @@ public class TravelingAdapter extends BaseListAdapter<TravelingEntity> {
 
     private boolean isNoData;
     private int mHeight;
+    public static final int ONE_SCREEN_COUNT = 7;
 
     public TravelingAdapter(Context context) {
         super(context);
@@ -48,8 +49,8 @@ public class TravelingAdapter extends BaseListAdapter<TravelingEntity> {
             mHeight = list.get(0).getHeight();
         } else {
             // 添加空数据
-            if (list.size() < 7) {
-                addALL(createEmptyList(7 - list.size()));
+            if (list.size() < ONE_SCREEN_COUNT) {
+                addALL(createEmptyList(ONE_SCREEN_COUNT - list.size()));
             }
         }
         notifyDataSetChanged();
