@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -27,6 +28,8 @@ public class AboutActivity extends AppCompatActivity {
     @Bind(R.id.webView)
     WebView webView;
 
+    private WebSettings settings;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,11 +42,34 @@ public class AboutActivity extends AppCompatActivity {
     private void initView() {
         initToolBar(toolbar, true, "关于");
 
+        settings = webView.getSettings();
+        settings.setJavaScriptEnabled(true); //如果访问的页面中有Javascript，则WebView必须设置支持Javascript
+        settings.setJavaScriptCanOpenWindowsAutomatically(true);
+        settings.setSupportZoom(true); //支持缩放
+        settings.setBuiltInZoomControls(true); //支持手势缩放
+        settings.setDisplayZoomControls(false); //是否显示缩放按钮
+
+        // >= 19(SDK4.4)启动硬件加速，否则启动软件加速
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.TEXT_AUTOSIZING);
+            webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+            settings.setLoadsImagesAutomatically(true); //支持自动加载图片
         } else {
-            webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NORMAL);
+            webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+            settings.setLoadsImagesAutomatically(false);
         }
+
+        settings.setUseWideViewPort(true); //将图片调整到适合WebView的大小
+        settings.setLoadWithOverviewMode(true); //自适应屏幕
+        settings.setDomStorageEnabled(true);
+        settings.setAppCacheEnabled(true);
+        settings.setSaveFormData(true);
+        settings.setSupportMultipleWindows(true);
+        settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK); //优先使用缓存
+
+        webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY); //可使滚动条不占位
+        webView.setHorizontalScrollbarOverlay(true);
+        webView.setHorizontalScrollBarEnabled(true);
+        webView.requestFocus();
 
         webView.loadUrl("file:///android_asset/about.html");
         webView.setWebViewClient(new WebViewClient() {
