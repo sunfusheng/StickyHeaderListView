@@ -27,7 +27,8 @@ public class TravelingAdapter extends BaseListAdapter<TravelingEntity> {
 
     private boolean isNoData;
     private int mHeight;
-    public static final int ONE_SCREEN_COUNT = 7;
+    public static final int ONE_SCREEN_COUNT = 7; // 一屏能显示的个数，这个根据屏幕高度和各自的需求定
+    public static final int ONE_REQUEST_COUNT = 10; // 一次请求的个数
 
     public TravelingAdapter(Context context) {
         super(context);

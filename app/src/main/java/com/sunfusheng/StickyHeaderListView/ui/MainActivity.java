@@ -165,14 +165,10 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
         smoothListView.setSmoothListViewListener(this);
         smoothListView.setOnScrollListener(new SmoothListView.OnSmoothScrollListener() {
             @Override
-            public void onSmoothScrolling(View view) {
-
-            }
+            public void onSmoothScrolling(View view) {}
 
             @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-
-            }
+            public void onScrollStateChanged(AbsListView view, int scrollState) {}
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
@@ -220,13 +216,16 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
             }
         });
 
-        // (ListView头部展示的)筛选视图点击
+        // (假的ListView头部展示的)筛选视图点击
         fvTopFilter.setOnFilterClickListener(new FilterView.OnFilterClickListener() {
             @Override
             public void onFilterClick(int position) {
                 if (isStickyTop) {
                     filterPosition = position;
                     fvTopFilter.showFilterLayout(position);
+                    if (titleViewHeight - 3 > filterViewTopSpace || filterViewTopSpace > titleViewHeight + 3) {
+                        smoothListView.smoothScrollToPositionFromTop(filterViewPosition, DensityUtil.dip2px(mContext, titleViewHeight));
+                    }
                 }
             }
         });
@@ -243,16 +242,7 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
         fvTopFilter.setOnItemCategoryClickListener(new FilterView.OnItemCategoryClickListener() {
             @Override
             public void onItemCategoryClick(FilterTwoEntity entity) {
-                List<TravelingEntity> list = ModelUtil.getCategoryTravelingData(entity);
-                if (list.size() < TravelingAdapter.ONE_SCREEN_COUNT) {
-                    smoothListView.setLoadMoreEnable(false);
-                }
-                if (list.size() == 0) {
-                    int height = mScreenHeight - DensityUtil.dip2px(mContext, 95);
-                    mAdapter.setData(ModelUtil.getNoDataEntity(height));
-                } else {
-                    mAdapter.setData(list);
-                }
+                fillAdapter(ModelUtil.getCategoryTravelingData(entity));
             }
         });
 
@@ -260,7 +250,7 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
         fvTopFilter.setOnItemSortClickListener(new FilterView.OnItemSortClickListener() {
             @Override
             public void onItemSortClick(FilterEntity entity) {
-                mAdapter.setData(ModelUtil.getSortTravelingData(entity));
+                fillAdapter(ModelUtil.getSortTravelingData(entity));
             }
         });
 
@@ -268,23 +258,25 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
         fvTopFilter.setOnItemFilterClickListener(new FilterView.OnItemFilterClickListener() {
             @Override
             public void onItemFilterClick(FilterEntity entity) {
-                List<TravelingEntity> list = ModelUtil.getFilterTravelingData(entity);
-                if (list.size() < TravelingAdapter.ONE_SCREEN_COUNT) {
-                    smoothListView.setLoadMoreEnable(false);
-                }
-                if (list.size() == 0) {
-                    int height = mScreenHeight - DensityUtil.dip2px(mContext, 95);
-                    mAdapter.setData(ModelUtil.getNoDataEntity(height));
-                } else {
-                    mAdapter.setData(list);
-                }
+                fillAdapter(ModelUtil.getFilterTravelingData(entity));
             }
         });
     }
 
+    // 填充数据
+    private void fillAdapter(List<TravelingEntity> list) {
+        if (list == null || list.size() == 0) {
+            smoothListView.setLoadMoreEnable(false);
+            int height = mScreenHeight - DensityUtil.dip2px(mContext, 95); // 95 = 标题栏高度 ＋ FilterView的高度
+            mAdapter.setData(ModelUtil.getNoDataEntity(height));
+        } else {
+            smoothListView.setLoadMoreEnable(list.size() > TravelingAdapter.ONE_REQUEST_COUNT);
+            mAdapter.setData(list);
+        }
+    }
+
     // 处理标题栏颜色渐变
     private void handleTitleBarColorEvaluate() {
-        Log.d("--->", "adViewTopSpace: "+adViewTopSpace);
         float fraction;
         if (adViewTopSpace > 0) {
             fraction = adViewTopSpace * 1f / 60;
