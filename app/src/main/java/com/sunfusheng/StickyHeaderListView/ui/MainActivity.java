@@ -191,6 +191,11 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
                     fvTopFilter.setVisibility(View.VISIBLE);
                 }
 
+                if (firstVisibleItem > filterViewPosition) {
+                    isStickyTop = true;
+                    fvTopFilter.setVisibility(View.VISIBLE);
+                }
+
                 if (isSmooth && isStickyTop) {
                     isSmooth = false;
                     fvTopFilter.showFilterLayout(filterPosition);
@@ -282,15 +287,21 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
             rlBar.setAlpha(1.0f - fraction);
             return ;
         }
-        rlBar.setAlpha(1.0f);
+
         float space = Math.abs(adViewTopSpace) * 1f;
         fraction = space / (adViewHeight - titleViewHeight);
-        if (fraction > 1.0f) {
-            fraction = 1.0f;
+        rlBar.setAlpha(1.0f);
+
+        if (fraction > 1.0f || isStickyTop) {
+            isStickyTop = true;
+            viewTitleBg.setAlpha(0f);
+            viewActionMoreBg.setAlpha(0f);
+            rlBar.setBackgroundColor(mContext.getResources().getColor(R.color.orange));
+        } else {
+            viewTitleBg.setAlpha(1.0f - fraction);
+            viewActionMoreBg.setAlpha(1.0f - fraction);
+            rlBar.setBackgroundColor(ColorUtil.getNewColorByStartEndColor(mContext, fraction, R.color.transparent, R.color.orange));
         }
-        viewTitleBg.setAlpha(1.0f - fraction);
-        viewActionMoreBg.setAlpha(1.0f - fraction);
-        rlBar.setBackgroundColor(ColorUtil.getNewColorByStartEndColor(mContext, fraction, R.color.transparent, R.color.orange));
     }
 
     @Override
