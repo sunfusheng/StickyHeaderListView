@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sunfusheng.StickyHeaderListView.R;
-import com.sunfusheng.StickyHeaderListView.manager.ImageManager;
 import com.sunfusheng.StickyHeaderListView.model.ChannelEntity;
 
 import java.util.List;
@@ -21,10 +20,6 @@ import butterknife.ButterKnife;
  * Created by sunfusheng on 16/4/20.
  */
 public class HeaderChannelAdapter extends BaseListAdapter<ChannelEntity> {
-
-    public HeaderChannelAdapter(Context context) {
-        super(context);
-    }
 
     public HeaderChannelAdapter(Context context, List<ChannelEntity> list) {
         super(context, list);
@@ -44,7 +39,7 @@ public class HeaderChannelAdapter extends BaseListAdapter<ChannelEntity> {
         ChannelEntity entity = getItem(position);
 
         holder.tvTitle.setText(entity.getTitle());
-        ImageManager.getInstance().loadCircleImage(mContext, entity.getImage_url(), holder.ivImage);
+        mImageManager.loadCircleImage(entity.getImage_url(), holder.ivImage);
         if (TextUtils.isEmpty(entity.getTips())) {
             holder.tvTips.setVisibility(View.INVISIBLE);
         } else {

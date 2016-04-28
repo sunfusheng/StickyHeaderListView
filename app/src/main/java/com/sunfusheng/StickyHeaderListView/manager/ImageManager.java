@@ -13,27 +13,22 @@ import com.sunfusheng.StickyHeaderListView.view.GlideCircleTransform;
  */
 public class ImageManager {
 
+    private Context mContext;
     public static final String ANDROID_RESOURCE = "android.resource://";
     public static final String FOREWARD_SLASH = "/";
 
-    private ImageManager() {}
-
-    private static class ImageManagerHolder {
-        private static ImageManager instance = new ImageManager();
-    }
-
-    public static ImageManager getInstance() {
-        return ImageManagerHolder.instance;
+    public ImageManager(Context context) {
+        this.mContext = context;
     }
 
     // 将资源ID转为Uri
-    public Uri resourceIdToUri(Context context, int resourceId) {
-        return Uri.parse(ANDROID_RESOURCE + context.getPackageName() + FOREWARD_SLASH + resourceId);
+    public Uri resourceIdToUri(int resourceId) {
+        return Uri.parse(ANDROID_RESOURCE + mContext.getPackageName() + FOREWARD_SLASH + resourceId);
     }
 
     // 加载网络图片
-    public void loadUrlImage(Context context, String url, ImageView imageView) {
-        Glide.with(context)
+    public void loadUrlImage(String url, ImageView imageView) {
+        Glide.with(mContext)
                 .load(url)
                 .placeholder(R.color.font_black_6)
                 .error(R.color.font_black_6)
@@ -42,9 +37,9 @@ public class ImageManager {
     }
 
     // 加载drawable图片
-    public void loadResImage(Context context, int resId, ImageView imageView) {
-        Glide.with(context)
-                .load(resourceIdToUri(context, resId))
+    public void loadResImage(int resId, ImageView imageView) {
+        Glide.with(mContext)
+                .load(resourceIdToUri(resId))
                 .placeholder(R.color.font_black_6)
                 .error(R.color.font_black_6)
                 .crossFade()
@@ -52,8 +47,8 @@ public class ImageManager {
     }
 
     // 加载本地图片
-    public void loadLocalImage(Context context, String path, ImageView imageView) {
-        Glide.with(context)
+    public void loadLocalImage(String path, ImageView imageView) {
+        Glide.with(mContext)
                 .load("file://" + path)
                 .placeholder(R.color.font_black_6)
                 .error(R.color.font_black_6)
@@ -62,35 +57,35 @@ public class ImageManager {
     }
 
     // 加载网络圆型图片
-    public void loadCircleImage(Context context, String url, ImageView imageView) {
-        Glide.with(context)
+    public void loadCircleImage(String url, ImageView imageView) {
+        Glide.with(mContext)
                 .load(url)
                 .placeholder(R.mipmap.ic_launcher)
                 .error(R.mipmap.ic_launcher)
                 .crossFade()
-                .transform(new GlideCircleTransform(context))
+                .transform(new GlideCircleTransform(mContext))
                 .into(imageView);
     }
 
     // 加载drawable圆型图片
-    public void loadCircleResImage(Context context, int resId, ImageView imageView) {
-        Glide.with(context)
-                .load(resourceIdToUri(context, resId))
+    public void loadCircleResImage(int resId, ImageView imageView) {
+        Glide.with(mContext)
+                .load(resourceIdToUri(resId))
                 .placeholder(R.color.font_black_6)
                 .error(R.color.font_black_6)
                 .crossFade()
-                .transform(new GlideCircleTransform(context))
+                .transform(new GlideCircleTransform(mContext))
                 .into(imageView);
     }
 
     // 加载本地圆型图片
-    public void loadCircleLocalImage(Context context, String path, ImageView imageView) {
-        Glide.with(context)
+    public void loadCircleLocalImage(String path, ImageView imageView) {
+        Glide.with(mContext)
                 .load("file://" + path)
                 .placeholder(R.color.font_black_6)
                 .error(R.color.font_black_6)
                 .crossFade()
-                .transform(new GlideCircleTransform(context))
+                .transform(new GlideCircleTransform(mContext))
                 .into(imageView);
     }
 

@@ -19,6 +19,7 @@ public class HeaderAdAdapter extends PagerAdapter {
     private List<ImageView> ivList; // ImageView的集合
     private List<String> adList; // 广告链接
     private int count = 1; // 广告的数量
+    private ImageManager mImageManager;
 
     public HeaderAdAdapter(Context context, List<String> adList, List<ImageView> ivList) {
         super();
@@ -28,6 +29,7 @@ public class HeaderAdAdapter extends PagerAdapter {
         if(ivList != null && ivList.size() > 0){
             count = ivList.size();
         }
+        mImageManager = new ImageManager(context);
     }
 
     @Override
@@ -55,7 +57,7 @@ public class HeaderAdAdapter extends PagerAdapter {
         ImageView iv = ivList.get(newPosition);
         String url = adList.get(newPosition);
         container.removeView(iv);
-        ImageManager.getInstance().loadUrlImage(mContext, url, iv);
+        mImageManager.loadUrlImage(url, iv);
         container.addView(iv);
         return iv;
     }

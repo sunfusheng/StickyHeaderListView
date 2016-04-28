@@ -61,14 +61,15 @@ public class AboutActivity extends AppCompatActivity {
         settings.setUseWideViewPort(true); //将图片调整到适合WebView的大小
         settings.setLoadWithOverviewMode(true); //自适应屏幕
         settings.setDomStorageEnabled(true);
-        settings.setAppCacheEnabled(true);
         settings.setSaveFormData(true);
         settings.setSupportMultipleWindows(true);
-        settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK); //优先使用缓存
+        settings.setAppCacheEnabled(true);
+        settings.setCacheMode(WebSettings.LOAD_DEFAULT); //优先使用缓存
 
-        webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY); //可使滚动条不占位
         webView.setHorizontalScrollbarOverlay(true);
-        webView.setHorizontalScrollBarEnabled(true);
+        webView.setHorizontalScrollBarEnabled(false);
+        webView.setOverScrollMode(View.OVER_SCROLL_NEVER); // 取消WebView中滚动或拖动到顶部、底部时的阴影
+        webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY); // 取消滚动条白边效果
         webView.requestFocus();
 
         webView.loadUrl("file:///android_asset/about.html");

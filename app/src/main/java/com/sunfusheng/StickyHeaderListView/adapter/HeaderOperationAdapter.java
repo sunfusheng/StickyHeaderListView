@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sunfusheng.StickyHeaderListView.R;
-import com.sunfusheng.StickyHeaderListView.manager.ImageManager;
 import com.sunfusheng.StickyHeaderListView.model.OperationEntity;
 
 import java.util.List;
@@ -44,7 +43,7 @@ public class HeaderOperationAdapter extends BaseListAdapter<OperationEntity> {
         OperationEntity entity = getItem(position);
 
         holder.tvTitle.setText(entity.getTitle());
-        ImageManager.getInstance().loadUrlImage(mContext, entity.getImage_url(), holder.ivImage);
+        mImageManager.loadUrlImage(entity.getImage_url(), holder.ivImage);
         if (TextUtils.isEmpty(entity.getSubtitle())) {
             holder.tvSubtitle.setVisibility(View.INVISIBLE);
         } else {

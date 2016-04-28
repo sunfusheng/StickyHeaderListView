@@ -330,4 +330,5 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
             }
         }, 2000);
     }
+
 }

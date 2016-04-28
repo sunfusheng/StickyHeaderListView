@@ -11,7 +11,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.sunfusheng.StickyHeaderListView.R;
-import com.sunfusheng.StickyHeaderListView.manager.ImageManager;
 import com.sunfusheng.StickyHeaderListView.model.TravelingEntity;
 
 import java.util.ArrayList;
@@ -98,7 +97,7 @@ public class TravelingAdapter extends BaseListAdapter<TravelingEntity> {
 
         holder.tvTitle.setText(entity.getFrom() + entity.getTitle() + entity.getType());
         holder.tvRank.setText("排名：" + entity.getRank());
-        ImageManager.getInstance().loadUrlImage(mContext, entity.getImage_url(), holder.ivImage);
+        mImageManager.loadUrlImage(entity.getImage_url(), holder.ivImage);
 
         return convertView;
     }
