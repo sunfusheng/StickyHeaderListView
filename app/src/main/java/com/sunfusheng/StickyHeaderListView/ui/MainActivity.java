@@ -38,6 +38,11 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+/**
+ * 作者：孙福生
+ *
+ * 个人博客：sunfusheng.com
+ */
 public class MainActivity extends AppCompatActivity implements SmoothListView.ISmoothListViewListener {
 
     @Bind(R.id.listView)
@@ -70,12 +75,15 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
     private HeaderDividerViewView headerDividerViewView; // 分割线占位图
     private HeaderFilterViewView headerFilterViewView; // 分类筛选视图
     private FilterData filterData; // 筛选数据
-    private TravelingAdapter mAdapter;
+    private TravelingAdapter mAdapter; // 主页数据
 
+    private View itemHeaderAdView; // 从ListView获取的广告子View
+    private View itemHeaderFilterView; // 从ListView获取的筛选子View
+    private boolean isScrollIdle = true; // ListView是否在滑动
     private boolean isStickyTop = false; // 是否吸附在顶部
     private boolean isSmooth = false; // 没有吸附的前提下，是否在滑动
     private int titleViewHeight = 50; // 标题栏的高度
-    private int filterPosition = -1;
+    private int filterPosition = -1; // 点击FilterView的位置：分类(0)、排序(1)、筛选(2)
 
     private int adViewHeight = 180; // 广告视图的高度
     private int adViewTopSpace; // 广告视图距离顶部的距离
@@ -158,10 +166,6 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
         filterViewPosition = smoothListView.getHeaderViewsCount() - 1;
     }
 
-    private boolean isScrollIdle = true;
-    View headerAdView;
-    View headerFilterView;
-
     private void initListener() {
         // 关于
         flActionMore.setOnClickListener(new View.OnClickListener() {
@@ -236,20 +240,20 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
                 if (isScrollIdle && adViewTopSpace < 0) return;
 
                 // 获取广告头部View、自身的高度、距离顶部的高度
-                if (headerAdView == null) {
-                    headerAdView = smoothListView.getChildAt(1-firstVisibleItem);
+                if (itemHeaderAdView == null) {
+                    itemHeaderAdView = smoothListView.getChildAt(1-firstVisibleItem);
                 }
-                if (headerAdView != null) {
-                    adViewTopSpace = DensityUtil.px2dip(mContext, headerAdView.getTop());
-                    adViewHeight = DensityUtil.px2dip(mContext, headerAdView.getHeight());
+                if (itemHeaderAdView != null) {
+                    adViewTopSpace = DensityUtil.px2dip(mContext, itemHeaderAdView.getTop());
+                    adViewHeight = DensityUtil.px2dip(mContext, itemHeaderAdView.getHeight());
                 }
 
                 // 获取筛选View、距离顶部的高度
-                if (headerFilterView == null) {
-                    headerFilterView = smoothListView.getChildAt(filterViewPosition - firstVisibleItem);
+                if (itemHeaderFilterView == null) {
+                    itemHeaderFilterView = smoothListView.getChildAt(filterViewPosition - firstVisibleItem);
                 }
-                if (headerFilterView != null) {
-                    filterViewTopSpace = DensityUtil.px2dip(mContext, headerFilterView.getTop());
+                if (itemHeaderFilterView != null) {
+                    filterViewTopSpace = DensityUtil.px2dip(mContext, itemHeaderFilterView.getTop());
                 }
 
                 // 处理筛选是否吸附在顶部
