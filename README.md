@@ -56,7 +56,7 @@ StickyHeaderListView 是基于实际需求做出的灵活可定制的UI功能，
 
 ### 微信公众号
 
-<img src="/screenshots/sunfusheng_weixin.jpg" style="width: 30%;">
+<img src="/screenshots/微信公众号.jpg" style="width: 30%;">
 
 
 
