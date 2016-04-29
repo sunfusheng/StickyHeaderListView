@@ -6,8 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.sunfusheng.StickyHeaderListView.manager.ImageManager;
-
 import java.util.List;
 
 /**
@@ -17,19 +15,15 @@ public class HeaderAdAdapter extends PagerAdapter {
 
     private Context mContext;
     private List<ImageView> ivList; // ImageView的集合
-    private List<String> adList; // 广告链接
     private int count = 1; // 广告的数量
-    private ImageManager mImageManager;
 
-    public HeaderAdAdapter(Context context, List<String> adList, List<ImageView> ivList) {
+    public HeaderAdAdapter(Context context, List<ImageView> ivList) {
         super();
         this.mContext = context;
-        this.adList = adList;
         this.ivList = ivList;
         if(ivList != null && ivList.size() > 0){
             count = ivList.size();
         }
-        mImageManager = new ImageManager(context);
     }
 
     @Override
@@ -55,9 +49,7 @@ public class HeaderAdAdapter extends PagerAdapter {
         int newPosition = position % count;
         // 先移除在添加，更新图片在container中的位置（把iv放至container末尾）
         ImageView iv = ivList.get(newPosition);
-        String url = adList.get(newPosition);
         container.removeView(iv);
-        mImageManager.loadUrlImage(url, iv);
         container.addView(iv);
         return iv;
     }

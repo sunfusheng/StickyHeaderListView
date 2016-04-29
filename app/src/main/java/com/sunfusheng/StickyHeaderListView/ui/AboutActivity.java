@@ -1,10 +1,14 @@
 package com.sunfusheng.StickyHeaderListView.ui;
 
+import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,7 +44,7 @@ public class AboutActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        initToolBar(toolbar, true, "关于");
+        initToolBar(toolbar, true, "关于 (V" + getVersionName(this) + ")");
 
         settings = webView.getSettings();
         settings.setJavaScriptEnabled(true); //如果访问的页面中有Javascript，则WebView必须设置支持Javascript
@@ -80,6 +84,21 @@ public class AboutActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    // 获取当前应用的版本号
+    public static String getVersionName(Context context) {
+        try {
+            PackageManager packageManager = context.getPackageManager();
+            PackageInfo packInfo = packageManager.getPackageInfo(context.getPackageName(),0);
+            String version = packInfo.versionName;
+            if (!TextUtils.isEmpty(version)) {
+                return version;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     public void initToolBar(Toolbar toolbar, boolean homeAsUpEnabled, String title) {

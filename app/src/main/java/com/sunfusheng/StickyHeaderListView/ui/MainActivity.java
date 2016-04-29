@@ -158,7 +158,67 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
         filterViewPosition = smoothListView.getHeaderViewsCount() - 1;
     }
 
+    private boolean isScrollIdle = true;
+    View headerAdView;
+    View headerFilterView;
+
     private void initListener() {
+        // 关于
+        flActionMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(mActivity, AboutActivity.class));
+            }
+        });
+
+        // (假的ListView头部展示的)筛选视图点击
+        headerFilterViewView.setOnFilterClickListener(new HeaderFilterViewView.OnFilterClickListener() {
+            @Override
+            public void onFilterClick(int position) {
+                filterPosition = position;
+                isSmooth = true;
+                smoothListView.smoothScrollToPositionFromTop(filterViewPosition, DensityUtil.dip2px(mContext, titleViewHeight));
+            }
+        });
+
+        // (真正的)筛选视图点击
+        fvTopFilter.setOnFilterClickListener(new FilterView.OnFilterClickListener() {
+            @Override
+            public void onFilterClick(int position) {
+                if (isStickyTop) {
+                    filterPosition = position;
+                    fvTopFilter.showFilterLayout(position);
+                    if (titleViewHeight - 3 > filterViewTopSpace || filterViewTopSpace > titleViewHeight + 3) {
+                        smoothListView.smoothScrollToPositionFromTop(filterViewPosition, DensityUtil.dip2px(mContext, titleViewHeight));
+                    }
+                }
+            }
+        });
+
+        // 分类Item点击
+        fvTopFilter.setOnItemCategoryClickListener(new FilterView.OnItemCategoryClickListener() {
+            @Override
+            public void onItemCategoryClick(FilterTwoEntity entity) {
+                fillAdapter(ModelUtil.getCategoryTravelingData(entity));
+            }
+        });
+
+        // 排序Item点击
+        fvTopFilter.setOnItemSortClickListener(new FilterView.OnItemSortClickListener() {
+            @Override
+            public void onItemSortClick(FilterEntity entity) {
+                fillAdapter(ModelUtil.getSortTravelingData(entity));
+            }
+        });
+
+        // 筛选Item点击
+        fvTopFilter.setOnItemFilterClickListener(new FilterView.OnItemFilterClickListener() {
+            @Override
+            public void onItemFilterClick(FilterEntity entity) {
+                fillAdapter(ModelUtil.getFilterTravelingData(entity));
+            }
+        });
+
         smoothListView.setRefreshEnable(true);
         smoothListView.setLoadMoreEnable(true);
         smoothListView.setSmoothListViewListener(this);
@@ -167,19 +227,29 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
             public void onSmoothScrolling(View view) {}
 
             @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {}
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                isScrollIdle = (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE);
+            }
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                View adView = smoothListView.getChildAt(1 - firstVisibleItem);
-                if (adView != null) {
-                    adViewTopSpace = DensityUtil.px2dip(mContext, adView.getTop());
-                    adViewHeight = DensityUtil.px2dip(mContext, adView.getHeight());
+                if (isScrollIdle && adViewTopSpace < 0) return;
+
+                // 获取广告头部View、自身的高度、距离顶部的高度
+                if (headerAdView == null) {
+                    headerAdView = smoothListView.getChildAt(1-firstVisibleItem);
+                }
+                if (headerAdView != null) {
+                    adViewTopSpace = DensityUtil.px2dip(mContext, headerAdView.getTop());
+                    adViewHeight = DensityUtil.px2dip(mContext, headerAdView.getHeight());
                 }
 
-                View filterView = smoothListView.getChildAt(filterViewPosition - firstVisibleItem);
-                if (filterView != null) {
-                    filterViewTopSpace = DensityUtil.px2dip(mContext, filterView.getTop());
+                // 获取筛选View、距离顶部的高度
+                if (headerFilterView == null) {
+                    headerFilterView = smoothListView.getChildAt(filterViewPosition - firstVisibleItem);
+                }
+                if (headerFilterView != null) {
+                    filterViewTopSpace = DensityUtil.px2dip(mContext, headerFilterView.getTop());
                 }
 
                 // 处理筛选是否吸附在顶部
@@ -207,64 +277,6 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
                 handleTitleBarColorEvaluate();
             }
         });
-
-        // (真正的)筛选视图点击
-        headerFilterViewView.setOnFilterClickListener(new HeaderFilterViewView.OnFilterClickListener() {
-            @Override
-            public void onFilterClick(int position) {
-                if (!isStickyTop) {
-                    filterPosition = position;
-                    isSmooth = true;
-                    smoothListView.smoothScrollToPositionFromTop(filterViewPosition, DensityUtil.dip2px(mContext, titleViewHeight));
-                }
-            }
-        });
-
-        // (假的ListView头部展示的)筛选视图点击
-        fvTopFilter.setOnFilterClickListener(new FilterView.OnFilterClickListener() {
-            @Override
-            public void onFilterClick(int position) {
-                if (isStickyTop) {
-                    filterPosition = position;
-                    fvTopFilter.showFilterLayout(position);
-                    if (titleViewHeight - 3 > filterViewTopSpace || filterViewTopSpace > titleViewHeight + 3) {
-                        smoothListView.smoothScrollToPositionFromTop(filterViewPosition, DensityUtil.dip2px(mContext, titleViewHeight));
-                    }
-                }
-            }
-        });
-
-        // 关于
-        flActionMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(mActivity, AboutActivity.class));
-            }
-        });
-
-        // 分类Item点击
-        fvTopFilter.setOnItemCategoryClickListener(new FilterView.OnItemCategoryClickListener() {
-            @Override
-            public void onItemCategoryClick(FilterTwoEntity entity) {
-                fillAdapter(ModelUtil.getCategoryTravelingData(entity));
-            }
-        });
-
-        // 排序Item点击
-        fvTopFilter.setOnItemSortClickListener(new FilterView.OnItemSortClickListener() {
-            @Override
-            public void onItemSortClick(FilterEntity entity) {
-                fillAdapter(ModelUtil.getSortTravelingData(entity));
-            }
-        });
-
-        // 筛选Item点击
-        fvTopFilter.setOnItemFilterClickListener(new FilterView.OnItemFilterClickListener() {
-            @Override
-            public void onItemFilterClick(FilterEntity entity) {
-                fillAdapter(ModelUtil.getFilterTravelingData(entity));
-            }
-        });
     }
 
     // 填充数据
@@ -283,23 +295,26 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
     private void handleTitleBarColorEvaluate() {
         float fraction;
         if (adViewTopSpace > 0) {
-            fraction = adViewTopSpace * 1f / 60;
-            rlBar.setAlpha(1.0f - fraction);
+            fraction = 1f - adViewTopSpace * 1f / 60;
+            if (fraction < 0f) fraction = 0f;
+            rlBar.setAlpha(fraction);
             return ;
         }
 
         float space = Math.abs(adViewTopSpace) * 1f;
         fraction = space / (adViewHeight - titleViewHeight);
-        rlBar.setAlpha(1.0f);
+        if (fraction < 0f) fraction = 0f;
+        if (fraction > 1f) fraction = 1f;
+        rlBar.setAlpha(1f);
 
-        if (fraction > 1.0f || isStickyTop) {
+        if (fraction >= 1f || isStickyTop) {
             isStickyTop = true;
             viewTitleBg.setAlpha(0f);
             viewActionMoreBg.setAlpha(0f);
             rlBar.setBackgroundColor(mContext.getResources().getColor(R.color.orange));
         } else {
-            viewTitleBg.setAlpha(1.0f - fraction);
-            viewActionMoreBg.setAlpha(1.0f - fraction);
+            viewTitleBg.setAlpha(1f - fraction);
+            viewActionMoreBg.setAlpha(1f - fraction);
             rlBar.setBackgroundColor(ColorUtil.getNewColorByStartEndColor(mContext, fraction, R.color.transparent, R.color.orange));
         }
     }

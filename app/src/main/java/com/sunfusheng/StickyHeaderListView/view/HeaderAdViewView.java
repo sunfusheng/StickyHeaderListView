@@ -14,6 +14,7 @@ import android.widget.ListView;
 
 import com.sunfusheng.StickyHeaderListView.R;
 import com.sunfusheng.StickyHeaderListView.adapter.HeaderAdAdapter;
+import com.sunfusheng.StickyHeaderListView.manager.ImageManager;
 import com.sunfusheng.StickyHeaderListView.util.DensityUtil;
 
 import java.util.ArrayList;
@@ -32,8 +33,8 @@ public class HeaderAdViewView extends HeaderViewInterface<List<String>> {
     private static final int TYPE_CHANGE_AD = 0;
     private Thread mThread;
     private List<ImageView> ivList;
-    private List<String> adList;
     private boolean isStopThread = false;
+    private ImageManager mImageManager;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -48,11 +49,11 @@ public class HeaderAdViewView extends HeaderViewInterface<List<String>> {
     public HeaderAdViewView(Activity context) {
         super(context);
         ivList = new ArrayList<>();
+        mImageManager = new ImageManager(context);
     }
 
     @Override
     protected void getView(List<String> list, ListView listView) {
-        adList = list;
         View view = mInflate.inflate(R.layout.header_ad_layout, listView, false);
         ButterKnife.bind(this, view);
 
@@ -67,7 +68,7 @@ public class HeaderAdViewView extends HeaderViewInterface<List<String>> {
             ivList.add(createImageView(list.get(i)));
         }
 
-        HeaderAdAdapter photoAdapter = new HeaderAdAdapter(mContext, adList, ivList);
+        HeaderAdAdapter photoAdapter = new HeaderAdAdapter(mContext, ivList);
         vpAd.setAdapter(photoAdapter);
 
         addIndicatorImageViews(size);
@@ -81,6 +82,7 @@ public class HeaderAdViewView extends HeaderViewInterface<List<String>> {
         AbsListView.LayoutParams params = new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         imageView.setLayoutParams(params);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        mImageManager.loadUrlImage(url, imageView);
         return imageView;
     }
 
@@ -132,7 +134,7 @@ public class HeaderAdViewView extends HeaderViewInterface<List<String>> {
     // 启动循环广告的线程
     private void startADRotate() {
         // 一个广告的时候不用转
-        if (adList == null || adList.size() <= 1) {
+        if (ivList == null || ivList.size() <= 1) {
             return;
         }
         if (mThread == null) {
