@@ -42,6 +42,10 @@ StickyHeaderListView 是基于实际需求做出的灵活可定制的UI功能，
 
 ### [APK下载地址](http://fir.im/StickyListView)
 
+### 微信公众号
+
+<img src="/screenshots/微信公众号.jpg" style="width: 30%;">
+
 ### 关于我
 
 个人邮箱：sfsheng0322@126.com
@@ -53,10 +57,6 @@ StickyHeaderListView 是基于实际需求做出的灵活可定制的UI功能，
 [个人博客](http://sunfusheng.com/)
 
 [新浪微博](http://weibo.com/u/3852192525)
-
-### 微信公众号
-
-<img src="/screenshots/微信公众号.jpg" style="width: 30%;">
 
 
 
