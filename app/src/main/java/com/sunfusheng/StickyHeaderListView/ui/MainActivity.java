@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
     }
 
     private void initView() {
-        fvTopFilter.setVisibility(View.INVISIBLE);
+        fvTopFilter.setVisibility(View.GONE);
 
         // 设置筛选数据
         fvTopFilter.setFilterData(mActivity, filterData);
@@ -259,7 +259,7 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
                 // 处理筛选是否吸附在顶部
                 if (filterViewTopSpace > titleViewHeight) {
                     isStickyTop = false; // 没有吸附在顶部
-                    fvTopFilter.setVisibility(View.INVISIBLE);
+                    fvTopFilter.setVisibility(View.GONE);
                 } else {
                     isStickyTop = true; // 吸附在顶部
                     fvTopFilter.setVisibility(View.VISIBLE);
