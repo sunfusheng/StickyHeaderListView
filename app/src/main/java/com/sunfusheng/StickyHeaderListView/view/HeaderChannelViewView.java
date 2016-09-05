@@ -2,6 +2,7 @@ package com.sunfusheng.StickyHeaderListView.view;
 
 import android.app.Activity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.sunfusheng.StickyHeaderListView.R;
@@ -34,7 +35,7 @@ public class HeaderChannelViewView extends HeaderViewInterface<List<ChannelEntit
         listView.addHeaderView(view);
     }
 
-    private void dealWithTheView(List<ChannelEntity> list) {
+    private void dealWithTheView(final List<ChannelEntity> list) {
         int size = list.size();
 
         if (size <= 4) {
@@ -49,6 +50,12 @@ public class HeaderChannelViewView extends HeaderViewInterface<List<ChannelEntit
 
         HeaderChannelAdapter adapter = new HeaderChannelAdapter(mContext, list);
         gvChannel.setAdapter(adapter);
+
+        gvChannel.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            }
+        });
     }
 
 }
