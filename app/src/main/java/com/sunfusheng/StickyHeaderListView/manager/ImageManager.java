@@ -15,7 +15,7 @@ public class ImageManager {
 
     private Context mContext;
     public static final String ANDROID_RESOURCE = "android.resource://";
-    public static final String FOREWARD_SLASH = "/";
+    public static final String SEPARATOR = "/";
 
     public ImageManager(Context context) {
         this.mContext = context;
@@ -23,7 +23,7 @@ public class ImageManager {
 
     // 将资源ID转为Uri
     public Uri resourceIdToUri(int resourceId) {
-        return Uri.parse(ANDROID_RESOURCE + mContext.getPackageName() + FOREWARD_SLASH + resourceId);
+        return Uri.parse(ANDROID_RESOURCE + mContext.getPackageName() + SEPARATOR + resourceId);
     }
 
     // 加载网络图片

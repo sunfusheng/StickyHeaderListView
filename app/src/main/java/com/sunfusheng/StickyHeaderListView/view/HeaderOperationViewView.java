@@ -2,11 +2,13 @@ package com.sunfusheng.StickyHeaderListView.view;
 
 import android.app.Activity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.sunfusheng.StickyHeaderListView.R;
 import com.sunfusheng.StickyHeaderListView.adapter.HeaderOperationAdapter;
 import com.sunfusheng.StickyHeaderListView.model.OperationEntity;
+import com.sunfusheng.StickyHeaderListView.util.ToastTip;
 
 import java.util.List;
 
@@ -35,8 +37,15 @@ public class HeaderOperationViewView extends HeaderViewInterface<List<OperationE
     }
 
     private void dealWithTheView(List<OperationEntity> list) {
-        HeaderOperationAdapter adapter = new HeaderOperationAdapter(mContext, list);
+        final HeaderOperationAdapter adapter = new HeaderOperationAdapter(mContext, list);
         gvOperation.setAdapter(adapter);
+
+        gvOperation.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ToastTip.show(mContext, adapter.getItem(position).getTitle());
+            }
+        });
     }
 
 }

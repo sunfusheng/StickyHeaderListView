@@ -8,6 +8,7 @@ import android.widget.ListView;
 import com.sunfusheng.StickyHeaderListView.R;
 import com.sunfusheng.StickyHeaderListView.adapter.HeaderChannelAdapter;
 import com.sunfusheng.StickyHeaderListView.model.ChannelEntity;
+import com.sunfusheng.StickyHeaderListView.util.ToastTip;
 
 import java.util.List;
 
@@ -48,12 +49,13 @@ public class HeaderChannelViewView extends HeaderViewInterface<List<ChannelEntit
             gvChannel.setNumColumns(4);
         }
 
-        HeaderChannelAdapter adapter = new HeaderChannelAdapter(mContext, list);
+        final HeaderChannelAdapter adapter = new HeaderChannelAdapter(mContext, list);
         gvChannel.setAdapter(adapter);
 
         gvChannel.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ToastTip.show(mContext, adapter.getItem(position).getTitle());
             }
         });
     }
