@@ -18,12 +18,12 @@ import butterknife.ButterKnife;
 /**
  * Created by sunfusheng on 16/4/20.
  */
-public class HeaderOperationViewView extends HeaderViewInterface<List<OperationEntity>> {
+public class HeaderOperationView extends HeaderViewInterface<List<OperationEntity>> {
 
     @Bind(R.id.gv_operation)
     FixedGridView gvOperation;
 
-    public HeaderOperationViewView(Activity context) {
+    public HeaderOperationView(Activity context) {
         super(context);
     }
 

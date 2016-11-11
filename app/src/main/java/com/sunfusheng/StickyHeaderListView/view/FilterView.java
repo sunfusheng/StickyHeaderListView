@@ -61,7 +61,6 @@ public class FilterView extends LinearLayout implements View.OnClickListener {
 
     private Context mContext;
     private Activity mActivity;
-    private boolean isStickyTop = false; // 是否吸附在顶部
     private boolean isShowing = false;
     private int filterPosition = -1;
     private int panelHeight;
@@ -305,11 +304,6 @@ public class FilterView extends LinearLayout implements View.OnClickListener {
         resetFilterStatus();
         viewMaskBg.setVisibility(View.GONE);
         ObjectAnimator.ofFloat(llContentListView, "translationY", 0, -panelHeight).setDuration(200).start();
-    }
-
-    // 是否吸附在顶部
-    public void setStickyTop(boolean stickyTop) {
-        isStickyTop = stickyTop;
     }
 
     // 设置筛选数据

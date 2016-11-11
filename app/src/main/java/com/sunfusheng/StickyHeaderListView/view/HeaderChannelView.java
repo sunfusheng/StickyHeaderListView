@@ -18,12 +18,12 @@ import butterknife.ButterKnife;
 /**
  * Created by sunfusheng on 16/4/20.
  */
-public class HeaderChannelViewView extends HeaderViewInterface<List<ChannelEntity>> {
+public class HeaderChannelView extends HeaderViewInterface<List<ChannelEntity>> {
 
     @Bind(R.id.gv_channel)
     FixedGridView gvChannel;
 
-    public HeaderChannelViewView(Activity context) {
+    public HeaderChannelView(Activity context) {
         super(context);
     }
 

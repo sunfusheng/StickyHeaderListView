@@ -23,7 +23,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class HeaderAdViewView extends HeaderViewInterface<List<String>> {
+public class HeaderBannerView extends HeaderViewInterface<List<String>> {
 
     @Bind(R.id.vp_ad)
     ViewPager vpAd;
@@ -46,7 +46,7 @@ public class HeaderAdViewView extends HeaderViewInterface<List<String>> {
         }
     };
 
-    public HeaderAdViewView(Activity context) {
+    public HeaderBannerView(Activity context) {
         super(context);
         ivList = new ArrayList<>();
         mImageManager = new ImageManager(context);

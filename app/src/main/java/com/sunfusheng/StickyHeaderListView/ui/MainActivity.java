@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AbsListView;
@@ -25,11 +24,11 @@ import com.sunfusheng.StickyHeaderListView.util.ColorUtil;
 import com.sunfusheng.StickyHeaderListView.util.DensityUtil;
 import com.sunfusheng.StickyHeaderListView.util.ModelUtil;
 import com.sunfusheng.StickyHeaderListView.view.FilterView;
-import com.sunfusheng.StickyHeaderListView.view.HeaderAdViewView;
-import com.sunfusheng.StickyHeaderListView.view.HeaderChannelViewView;
-import com.sunfusheng.StickyHeaderListView.view.HeaderDividerViewView;
-import com.sunfusheng.StickyHeaderListView.view.HeaderFilterViewView;
-import com.sunfusheng.StickyHeaderListView.view.HeaderOperationViewView;
+import com.sunfusheng.StickyHeaderListView.view.HeaderBannerView;
+import com.sunfusheng.StickyHeaderListView.view.HeaderChannelView;
+import com.sunfusheng.StickyHeaderListView.view.HeaderDividerView;
+import com.sunfusheng.StickyHeaderListView.view.HeaderFilterView;
+import com.sunfusheng.StickyHeaderListView.view.HeaderOperationView;
 import com.sunfusheng.StickyHeaderListView.view.SmoothListView.SmoothListView;
 
 import java.util.ArrayList;
@@ -69,11 +68,11 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
     private List<OperationEntity> operationList = new ArrayList<>(); // 运营数据
     private List<TravelingEntity> travelingList = new ArrayList<>(); // ListView数据
 
-    private HeaderAdViewView listViewAdHeaderView; // 广告视图
-    private HeaderChannelViewView headerChannelView; // 频道视图
-    private HeaderOperationViewView headerOperationViewView; // 运营视图
-    private HeaderDividerViewView headerDividerViewView; // 分割线占位图
-    private HeaderFilterViewView headerFilterViewView; // 分类筛选视图
+    private HeaderBannerView headerBannerView; // 广告视图
+    private HeaderChannelView headerChannelView; // 频道视图
+    private HeaderOperationView headerOperationView; // 运营视图
+    private HeaderDividerView headerDividerView; // 分割线占位图
+    private HeaderFilterView headerFilterView; // 分类筛选视图
     private FilterData filterData; // 筛选数据
     private TravelingAdapter mAdapter; // 主页数据
 
@@ -90,13 +89,6 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
 
     private int filterViewPosition = 4; // 筛选视图的位置
     private int filterViewTopSpace; // 筛选视图距离顶部的距离
-
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,24 +132,24 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
         fvTopFilter.setFilterData(mActivity, filterData);
 
         // 设置广告数据
-        listViewAdHeaderView = new HeaderAdViewView(this);
-        listViewAdHeaderView.fillView(adList, smoothListView);
+        headerBannerView = new HeaderBannerView(this);
+        headerBannerView.fillView(adList, smoothListView);
 
         // 设置频道数据
-        headerChannelView = new HeaderChannelViewView(this);
+        headerChannelView = new HeaderChannelView(this);
         headerChannelView.fillView(channelList, smoothListView);
 
         // 设置运营数据
-        headerOperationViewView = new HeaderOperationViewView(this);
-        headerOperationViewView.fillView(operationList, smoothListView);
+        headerOperationView = new HeaderOperationView(this);
+        headerOperationView.fillView(operationList, smoothListView);
 
         // 设置分割线
-        headerDividerViewView = new HeaderDividerViewView(this);
-        headerDividerViewView.fillView("", smoothListView);
+        headerDividerView = new HeaderDividerView(this);
+        headerDividerView.fillView("", smoothListView);
 
         // 设置筛选数据
-        headerFilterViewView = new HeaderFilterViewView(this);
-        headerFilterViewView.fillView(new Object(), smoothListView);
+        headerFilterView = new HeaderFilterView(this);
+        headerFilterView.fillView(new Object(), smoothListView);
 
         // 设置ListView数据
         mAdapter = new TravelingAdapter(this, travelingList);
@@ -176,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
         });
 
         // (假的ListView头部展示的)筛选视图点击
-        headerFilterViewView.setOnFilterClickListener(new HeaderFilterViewView.OnFilterClickListener() {
+        headerFilterView.setOnFilterClickListener(new HeaderFilterView.OnFilterClickListener() {
             @Override
             public void onFilterClick(int position) {
                 filterPosition = position;
@@ -275,8 +267,6 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
                     fvTopFilter.showFilterLayout(filterPosition);
                 }
 
-                fvTopFilter.setStickyTop(isStickyTop);
-
                 // 处理标题栏颜色渐变
                 handleTitleBarColorEvaluate();
             }
@@ -326,8 +316,8 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (listViewAdHeaderView != null) {
-            listViewAdHeaderView.stopADRotate();
+        if (headerBannerView != null) {
+            headerBannerView.stopADRotate();
         }
     }
 
@@ -342,7 +332,7 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
 
     @Override
     public void onRefresh() {
-        mHandler.postDelayed(new Runnable() {
+        new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 smoothListView.stopRefresh();
@@ -353,7 +343,7 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
 
     @Override
     public void onLoadMore() {
-        mHandler.postDelayed(new Runnable() {
+        new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 smoothListView.stopLoadMore();
