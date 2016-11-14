@@ -11,6 +11,7 @@ import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.sunfusheng.StickyHeaderListView.R;
 import com.sunfusheng.StickyHeaderListView.adapter.HeaderAdAdapter;
@@ -30,6 +31,8 @@ public class HeaderBannerView extends HeaderViewInterface<List<String>> {
     ViewPager vpBanner;
     @Bind(R.id.ll_index_container)
     LinearLayout llIndexContainer;
+    @Bind(R.id.rl_banner)
+    RelativeLayout rlBanner;
 
     private static final int BANNER_TYPE = 0;
     private static final int BANNER_TIME = 5000; // ms
@@ -71,9 +74,9 @@ public class HeaderBannerView extends HeaderViewInterface<List<String>> {
             ivList.add(createImageView(list.get(i)));
         }
 
-        ViewGroup.LayoutParams layoutParams = vpBanner.getLayoutParams();
+        AbsListView.LayoutParams layoutParams = (AbsListView.LayoutParams) rlBanner.getLayoutParams();
         layoutParams.height = bannerHeight;
-        vpBanner.setLayoutParams(layoutParams);
+        rlBanner.setLayoutParams(layoutParams);
 
         HeaderAdAdapter photoAdapter = new HeaderAdAdapter(mContext, ivList);
         vpBanner.setAdapter(photoAdapter);
