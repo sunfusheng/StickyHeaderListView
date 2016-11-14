@@ -314,11 +314,15 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (headerBannerView != null) {
-            headerBannerView.stopADRotate();
-        }
+    protected void onResume() {
+        super.onResume();
+        headerBannerView.enqueueBannerLoopMessage();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        headerBannerView.removeBannerLoopMessage();
     }
 
     @Override

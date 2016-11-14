@@ -3,10 +3,10 @@ package com.sunfusheng.StickyHeaderListView.view;
 import android.app.Activity;
 import android.os.Handler;
 import android.os.Message;
-import android.os.SystemClock;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -17,6 +17,7 @@ import com.sunfusheng.StickyHeaderListView.adapter.HeaderAdAdapter;
 import com.sunfusheng.StickyHeaderListView.manager.ImageManager;
 import com.sunfusheng.StickyHeaderListView.util.DensityUtil;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,23 +26,24 @@ import butterknife.ButterKnife;
 
 public class HeaderBannerView extends HeaderViewInterface<List<String>> {
 
-    @Bind(R.id.vp_ad)
-    ViewPager vpAd;
+    @Bind(R.id.vp_banner)
+    ViewPager vpBanner;
     @Bind(R.id.ll_index_container)
     LinearLayout llIndexContainer;
 
-    private static final int TYPE_CHANGE_AD = 0;
-    private Thread mThread;
+    private static final int BANNER_TYPE = 0;
+    private static final int BANNER_TIME = 5000; // ms
     private List<ImageView> ivList;
-    private boolean isStopThread = false;
     private ImageManager mImageManager;
+    private int bannerHeight;
 
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            if (msg.what == TYPE_CHANGE_AD) {
-                vpAd.setCurrentItem(vpAd.getCurrentItem() + 1);
+            if (msg.what == BANNER_TYPE) {
+                vpBanner.setCurrentItem(vpBanner.getCurrentItem() + 1);
+                enqueueBannerLoopMessage();
             }
         }
     };
@@ -50,11 +52,12 @@ public class HeaderBannerView extends HeaderViewInterface<List<String>> {
         super(context);
         ivList = new ArrayList<>();
         mImageManager = new ImageManager(context);
+        bannerHeight = DensityUtil.getWindowWidth(context) * 9 / 16;
     }
 
     @Override
     protected void getView(List<String> list, ListView listView) {
-        View view = mInflate.inflate(R.layout.header_ad_layout, listView, false);
+        View view = mInflate.inflate(R.layout.header_banner_layout, listView, false);
         ButterKnife.bind(this, view);
 
         dealWithTheView(list);
@@ -68,12 +71,16 @@ public class HeaderBannerView extends HeaderViewInterface<List<String>> {
             ivList.add(createImageView(list.get(i)));
         }
 
+        ViewGroup.LayoutParams layoutParams = vpBanner.getLayoutParams();
+        layoutParams.height = bannerHeight;
+        vpBanner.setLayoutParams(layoutParams);
+
         HeaderAdAdapter photoAdapter = new HeaderAdAdapter(mContext, ivList);
-        vpAd.setAdapter(photoAdapter);
+        vpBanner.setAdapter(photoAdapter);
 
         addIndicatorImageViews(size);
         setViewPagerChangeListener(size);
-        startADRotate();
+        controlViewPagerSpeed(vpBanner, 500);
     }
 
     // 创建要显示的ImageView
@@ -107,7 +114,7 @@ public class HeaderBannerView extends HeaderViewInterface<List<String>> {
 
     // 为ViewPager设置监听器
     private void setViewPagerChangeListener(final int size) {
-        vpAd.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        vpBanner.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
                 if (ivList != null && ivList.size() > 0) {
@@ -131,35 +138,28 @@ public class HeaderBannerView extends HeaderViewInterface<List<String>> {
         });
     }
 
-    // 启动循环广告的线程
-    private void startADRotate() {
-        // 一个广告的时候不用转
-        if (ivList == null || ivList.size() <= 1) {
-            return;
-        }
-        if (mThread == null) {
-            mThread = new Thread(new Runnable() {
+    // 添加Banner循环消息到队列
+    public void enqueueBannerLoopMessage() {
+        if (ivList == null || ivList.size() <= 1) return;
+        mHandler.sendEmptyMessageDelayed(BANNER_TYPE, BANNER_TIME);
+    }
 
-                @Override
-                public void run() {
-                    // 当没离开该页面时一直转
-                    while (!isStopThread) {
-                        // 每隔5秒转一次
-                        SystemClock.sleep(5000);
-                        // 在主线程更新界面
-                        mHandler.sendEmptyMessage(TYPE_CHANGE_AD);
-                    }
-                }
-            });
-            mThread.start();
+    // 移除Banner循环的消息
+    public void removeBannerLoopMessage() {
+        if (mHandler.hasMessages(BANNER_TYPE)) {
+            mHandler.removeMessages(BANNER_TYPE);
         }
     }
 
-    // 停止循环广告的线程，清空消息队列
-    public void stopADRotate() {
-        isStopThread = true;
-        if (mHandler != null && mHandler.hasMessages(TYPE_CHANGE_AD)) {
-            mHandler.removeMessages(TYPE_CHANGE_AD);
+    // 反射设置ViewPager的轮播速度
+    private void controlViewPagerSpeed(ViewPager viewPager, int speedTimeMillis) {
+        try {
+            Field field = ViewPager.class.getDeclaredField("mScroller");
+            field.setAccessible(true);
+            FixedSpeedScroller scroller = new FixedSpeedScroller(mContext, new AccelerateDecelerateInterpolator());
+            scroller.setmDuration(speedTimeMillis);
+            field.set(viewPager, scroller);
+        } catch (Exception e) {
         }
     }
 
