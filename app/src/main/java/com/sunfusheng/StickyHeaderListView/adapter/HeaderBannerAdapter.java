@@ -11,15 +11,13 @@ import java.util.List;
 /**
  * Created by sunfusheng on 16/4/20.
  */
-public class HeaderAdAdapter extends PagerAdapter {
+public class HeaderBannerAdapter extends PagerAdapter {
 
-    private Context mContext;
     private List<ImageView> ivList; // ImageView的集合
     private int count = 1; // 广告的数量
 
-    public HeaderAdAdapter(Context context, List<ImageView> ivList) {
+    public HeaderBannerAdapter(Context context, List<ImageView> ivList) {
         super();
-        this.mContext = context;
         this.ivList = ivList;
         if(ivList != null && ivList.size() > 0){
             count = ivList.size();

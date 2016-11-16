@@ -14,7 +14,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.sunfusheng.StickyHeaderListView.R;
-import com.sunfusheng.StickyHeaderListView.adapter.HeaderAdAdapter;
+import com.sunfusheng.StickyHeaderListView.adapter.HeaderBannerAdapter;
 import com.sunfusheng.StickyHeaderListView.manager.ImageManager;
 import com.sunfusheng.StickyHeaderListView.util.DensityUtil;
 
@@ -78,7 +78,7 @@ public class HeaderBannerView extends HeaderViewInterface<List<String>> {
         layoutParams.height = bannerHeight;
         rlBanner.setLayoutParams(layoutParams);
 
-        HeaderAdAdapter photoAdapter = new HeaderAdAdapter(mContext, ivList);
+        HeaderBannerAdapter photoAdapter = new HeaderBannerAdapter(mContext, ivList);
         vpBanner.setAdapter(photoAdapter);
 
         addIndicatorImageViews(size);
