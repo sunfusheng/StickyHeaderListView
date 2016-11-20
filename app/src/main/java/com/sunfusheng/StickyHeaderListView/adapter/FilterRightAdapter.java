@@ -53,7 +53,7 @@ public class FilterRightAdapter extends BaseListAdapter<FilterEntity> {
 
         holder.tvTitle.setText(entity.getKey());
         if (entity.isSelected()) {
-            holder.tvTitle.setTextColor(mContext.getResources().getColor(R.color.orange));
+            holder.tvTitle.setTextColor(mContext.getResources().getColor(R.color.colorPrimary));
         } else {
             holder.tvTitle.setTextColor(mContext.getResources().getColor(R.color.font_black_3));
         }

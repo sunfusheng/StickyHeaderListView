@@ -22,14 +22,15 @@
         <RelativeLayout
             android:id="@+id/rl_bar"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="65dp"
             android:background="@color/transparent"
             android:visibility="visible">
 
             <FrameLayout
                 android:layout_width="190dp"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
+                android:layout_marginBottom="10dp"
+                android:layout_alignParentBottom="true"
                 android:layout_marginLeft="15dp">
 
                 <View
@@ -54,7 +55,8 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="10dp"
                 android:layout_marginRight="15dp">
 
                 <View

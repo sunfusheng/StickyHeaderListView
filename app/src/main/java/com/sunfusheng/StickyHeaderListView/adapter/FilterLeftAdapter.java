@@ -53,7 +53,7 @@ public class FilterLeftAdapter extends BaseListAdapter<FilterTwoEntity> {
 
         holder.tvTitle.setText(entity.getType());
         if (entity.isSelected()) {
-            holder.tvTitle.setTextColor(mContext.getResources().getColor(R.color.orange));
+            holder.tvTitle.setTextColor(mContext.getResources().getColor(R.color.colorPrimary));
             holder.llRootView.setBackgroundColor(mContext.getResources().getColor(R.color.white));
         } else {
             holder.tvTitle.setTextColor(mContext.getResources().getColor(R.color.font_black_2));

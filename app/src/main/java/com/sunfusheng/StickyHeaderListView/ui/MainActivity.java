@@ -23,6 +23,7 @@ import com.sunfusheng.StickyHeaderListView.model.TravelingEntity;
 import com.sunfusheng.StickyHeaderListView.util.ColorUtil;
 import com.sunfusheng.StickyHeaderListView.util.DensityUtil;
 import com.sunfusheng.StickyHeaderListView.util.ModelUtil;
+import com.sunfusheng.StickyHeaderListView.util.StatusBarUtil;
 import com.sunfusheng.StickyHeaderListView.view.FilterView;
 import com.sunfusheng.StickyHeaderListView.view.HeaderBannerView;
 import com.sunfusheng.StickyHeaderListView.view.HeaderChannelView;
@@ -81,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
     private boolean isScrollIdle = true; // ListView是否在滑动
     private boolean isStickyTop = false; // 是否吸附在顶部
     private boolean isSmooth = false; // 没有吸附的前提下，是否在滑动
-    private int titleViewHeight = 50; // 标题栏的高度
+    private int titleViewHeight = 65; // 标题栏的高度
     private int filterPosition = -1; // 点击FilterView的位置：分类(0)、排序(1)、筛选(2)
 
     private int adViewHeight = 180; // 广告视图的高度
@@ -95,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        StatusBarUtil.setStatusBarTrans(this, false);
 
         initData();
         initView();
@@ -305,11 +307,11 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
             isStickyTop = true;
             viewTitleBg.setAlpha(0f);
             viewActionMoreBg.setAlpha(0f);
-            rlBar.setBackgroundColor(mContext.getResources().getColor(R.color.orange));
+            rlBar.setBackgroundColor(mContext.getResources().getColor(R.color.colorPrimary));
         } else {
             viewTitleBg.setAlpha(1f - fraction);
             viewActionMoreBg.setAlpha(1f - fraction);
-            rlBar.setBackgroundColor(ColorUtil.getNewColorByStartEndColor(mContext, fraction, R.color.transparent, R.color.orange));
+            rlBar.setBackgroundColor(ColorUtil.getNewColorByStartEndColor(mContext, fraction, R.color.transparent, R.color.colorPrimary));
         }
     }
 

@@ -184,7 +184,7 @@ public class FilterView extends LinearLayout implements View.OnClickListener {
 
     // 设置分类数据
     private void setCategoryAdapter() {
-        tvCategory.setTextColor(mActivity.getResources().getColor(R.color.orange));
+        tvCategory.setTextColor(mActivity.getResources().getColor(R.color.colorPrimary));
         ivCategoryArrow.setImageResource(R.mipmap.home_up_arrow);
         lvLeft.setVisibility(VISIBLE);
         lvRight.setVisibility(VISIBLE);
@@ -243,7 +243,7 @@ public class FilterView extends LinearLayout implements View.OnClickListener {
 
     // 设置排序数据
     private void setSortAdapter() {
-        tvSort.setTextColor(mActivity.getResources().getColor(R.color.orange));
+        tvSort.setTextColor(mActivity.getResources().getColor(R.color.colorPrimary));
         ivSortArrow.setImageResource(R.mipmap.home_up_arrow);
         lvLeft.setVisibility(GONE);
         lvRight.setVisibility(VISIBLE);
@@ -264,7 +264,7 @@ public class FilterView extends LinearLayout implements View.OnClickListener {
 
     // 设置筛选数据
     private void setFilterAdapter() {
-        tvFilter.setTextColor(mActivity.getResources().getColor(R.color.orange));
+        tvFilter.setTextColor(mActivity.getResources().getColor(R.color.colorPrimary));
         ivFilterArrow.setImageResource(R.mipmap.home_up_arrow);
         lvLeft.setVisibility(GONE);
         lvRight.setVisibility(VISIBLE);
