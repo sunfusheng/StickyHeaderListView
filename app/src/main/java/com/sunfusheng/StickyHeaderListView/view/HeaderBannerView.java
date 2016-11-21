@@ -166,4 +166,7 @@ public class HeaderBannerView extends HeaderViewInterface<List<String>> {
         }
     }
 
+    public int getBannerHeight() {
+        return bannerHeight;
+    }
 }

@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
     private Activity mActivity;
     private int mScreenHeight; // 屏幕高度
 
-    private List<String> adList = new ArrayList<>(); // 广告数据
+    private List<String> bannerList = new ArrayList<>(); // 广告数据
     private List<ChannelEntity> channelList = new ArrayList<>(); // 频道数据
     private List<OperationEntity> operationList = new ArrayList<>(); // 运营数据
     private List<TravelingEntity> travelingList = new ArrayList<>(); // ListView数据
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
     private FilterData filterData; // 筛选数据
     private TravelingAdapter mAdapter; // 主页数据
 
-    private View itemHeaderAdView; // 从ListView获取的广告子View
+    private View itemHeaderBannerView; // 从ListView获取的广告子View
     private View itemHeaderFilterView; // 从ListView获取的筛选子View
     private boolean isScrollIdle = true; // ListView是否在滑动
     private boolean isStickyTop = false; // 是否吸附在顶部
@@ -85,11 +85,11 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
     private int titleViewHeight = 65; // 标题栏的高度
     private int filterPosition = -1; // 点击FilterView的位置：分类(0)、排序(1)、筛选(2)
 
-    private int adViewHeight = 180; // 广告视图的高度
-    private int adViewTopSpace; // 广告视图距离顶部的距离
+    private int bannerViewHeight = 180; // 广告视图的高度
+    private int bannerViewTopMargin; // 广告视图距离顶部的距离
 
     private int filterViewPosition = 4; // 筛选视图的位置
-    private int filterViewTopSpace; // 筛选视图距离顶部的距离
+    private int filterViewTopMargin; // 筛选视图距离顶部的距离
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,14 +115,11 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
         filterData.setFilters(ModelUtil.getFilterData());
 
         // 广告数据
-        adList = ModelUtil.getAdData();
-
+        bannerList = ModelUtil.getAdData();
         // 频道数据
         channelList = ModelUtil.getChannelData();
-
         // 运营数据
         operationList = ModelUtil.getOperationData();
-
         // ListView数据
         travelingList = ModelUtil.getTravelingData();
     }
@@ -135,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
 
         // 设置广告数据
         headerBannerView = new HeaderBannerView(this);
-        headerBannerView.fillView(adList, smoothListView);
+        headerBannerView.fillView(bannerList, smoothListView);
 
         // 设置频道数据
         headerChannelView = new HeaderChannelView(this);
@@ -186,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
                 if (isStickyTop) {
                     filterPosition = position;
                     fvTopFilter.showFilterLayout(position);
-                    if (titleViewHeight - 3 > filterViewTopSpace || filterViewTopSpace > titleViewHeight + 3) {
+                    if (titleViewHeight - 3 > filterViewTopMargin || filterViewTopMargin > titleViewHeight + 3) {
                         smoothListView.smoothScrollToPositionFromTop(filterViewPosition, DensityUtil.dip2px(mContext, titleViewHeight));
                     }
                 }
@@ -231,15 +228,15 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if (isScrollIdle && adViewTopSpace < 0) return;
+                if (isScrollIdle && bannerViewTopMargin < 0) return;
 
                 // 获取广告头部View、自身的高度、距离顶部的高度
-                if (itemHeaderAdView == null) {
-                    itemHeaderAdView = smoothListView.getChildAt(1-firstVisibleItem);
+                if (itemHeaderBannerView == null) {
+                    itemHeaderBannerView = smoothListView.getChildAt(1-firstVisibleItem);
                 }
-                if (itemHeaderAdView != null) {
-                    adViewTopSpace = DensityUtil.px2dip(mContext, itemHeaderAdView.getTop());
-                    adViewHeight = DensityUtil.px2dip(mContext, itemHeaderAdView.getHeight());
+                if (itemHeaderBannerView != null) {
+                    bannerViewTopMargin = DensityUtil.px2dip(mContext, itemHeaderBannerView.getTop());
+                    bannerViewHeight = DensityUtil.px2dip(mContext, itemHeaderBannerView.getHeight());
                 }
 
                 // 获取筛选View、距离顶部的高度
@@ -247,21 +244,16 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
                     itemHeaderFilterView = smoothListView.getChildAt(filterViewPosition - firstVisibleItem);
                 }
                 if (itemHeaderFilterView != null) {
-                    filterViewTopSpace = DensityUtil.px2dip(mContext, itemHeaderFilterView.getTop());
+                    filterViewTopMargin = DensityUtil.px2dip(mContext, itemHeaderFilterView.getTop());
                 }
 
                 // 处理筛选是否吸附在顶部
-                if (filterViewTopSpace > titleViewHeight) {
-                    isStickyTop = false; // 没有吸附在顶部
-                    fvTopFilter.setVisibility(View.GONE);
-                } else {
+                if (filterViewTopMargin <= titleViewHeight || firstVisibleItem > filterViewPosition) {
                     isStickyTop = true; // 吸附在顶部
                     fvTopFilter.setVisibility(View.VISIBLE);
-                }
-
-                if (firstVisibleItem > filterViewPosition) {
-                    isStickyTop = true;
-                    fvTopFilter.setVisibility(View.VISIBLE);
+                } else {
+                    isStickyTop = false; // 没有吸附在顶部
+                    fvTopFilter.setVisibility(View.GONE);
                 }
 
                 if (isSmooth && isStickyTop) {
@@ -290,15 +282,15 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
     // 处理标题栏颜色渐变
     private void handleTitleBarColorEvaluate() {
         float fraction;
-        if (adViewTopSpace > 0) {
-            fraction = 1f - adViewTopSpace * 1f / 60;
+        if (bannerViewTopMargin > 0) {
+            fraction = 1f - bannerViewTopMargin * 1f / 60;
             if (fraction < 0f) fraction = 0f;
             rlBar.setAlpha(fraction);
             return ;
         }
 
-        float space = Math.abs(adViewTopSpace) * 1f;
-        fraction = space / (adViewHeight - titleViewHeight);
+        float space = Math.abs(bannerViewTopMargin) * 1f;
+        fraction = space / (bannerViewHeight - titleViewHeight);
         if (fraction < 0f) fraction = 0f;
         if (fraction > 1f) fraction = 1f;
         rlBar.setAlpha(1f);
