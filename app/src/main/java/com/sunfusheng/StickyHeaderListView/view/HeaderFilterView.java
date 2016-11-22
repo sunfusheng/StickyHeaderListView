@@ -6,7 +6,7 @@ import android.widget.ListView;
 
 import com.sunfusheng.StickyHeaderListView.R;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -14,7 +14,7 @@ import butterknife.ButterKnife;
  */
 public class HeaderFilterView extends HeaderViewInterface<Object> implements FilterView.OnFilterClickListener {
 
-    @Bind(R.id.fv_filter)
+    @BindView(R.id.fv_filter)
     FilterView fvFilter;
 
     public HeaderFilterView(Activity context) {

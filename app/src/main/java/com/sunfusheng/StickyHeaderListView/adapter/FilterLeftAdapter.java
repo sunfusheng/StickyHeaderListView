@@ -12,7 +12,7 @@ import com.sunfusheng.StickyHeaderListView.model.FilterTwoEntity;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -64,10 +64,10 @@ public class FilterLeftAdapter extends BaseListAdapter<FilterTwoEntity> {
     }
 
     static class ViewHolder {
-        @Bind(R.id.ll_root_view)
-        LinearLayout llRootView;
-        @Bind(R.id.tv_title)
+        @BindView(R.id.tv_title)
         TextView tvTitle;
+        @BindView(R.id.ll_root_view)
+        LinearLayout llRootView;
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);

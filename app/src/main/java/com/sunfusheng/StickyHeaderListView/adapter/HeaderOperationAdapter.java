@@ -13,7 +13,7 @@ import com.sunfusheng.StickyHeaderListView.model.OperationEntity;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -55,11 +55,11 @@ public class HeaderOperationAdapter extends BaseListAdapter<OperationEntity> {
     }
 
     static class ViewHolder {
-        @Bind(R.id.iv_image)
+        @BindView(R.id.iv_image)
         ImageView ivImage;
-        @Bind(R.id.tv_title)
+        @BindView(R.id.tv_title)
         TextView tvTitle;
-        @Bind(R.id.tv_subtitle)
+        @BindView(R.id.tv_subtitle)
         TextView tvSubtitle;
 
         ViewHolder(View view) {

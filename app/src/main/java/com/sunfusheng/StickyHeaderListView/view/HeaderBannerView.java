@@ -22,16 +22,16 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class HeaderBannerView extends HeaderViewInterface<List<String>> {
 
-    @Bind(R.id.vp_banner)
+    @BindView(R.id.vp_banner)
     ViewPager vpBanner;
-    @Bind(R.id.ll_index_container)
+    @BindView(R.id.ll_index_container)
     LinearLayout llIndexContainer;
-    @Bind(R.id.rl_banner)
+    @BindView(R.id.rl_banner)
     RelativeLayout rlBanner;
 
     private static final int BANNER_TYPE = 0;

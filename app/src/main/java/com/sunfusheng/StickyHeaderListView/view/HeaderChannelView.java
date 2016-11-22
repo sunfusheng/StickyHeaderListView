@@ -12,7 +12,7 @@ import com.sunfusheng.StickyHeaderListView.util.ToastTip;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -20,7 +20,7 @@ import butterknife.ButterKnife;
  */
 public class HeaderChannelView extends HeaderViewInterface<List<ChannelEntity>> {
 
-    @Bind(R.id.gv_channel)
+    @BindView(R.id.gv_channel)
     FixedGridView gvChannel;
 
     public HeaderChannelView(Activity context) {

@@ -12,7 +12,7 @@ import com.sunfusheng.StickyHeaderListView.util.ToastTip;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -20,7 +20,7 @@ import butterknife.ButterKnife;
  */
 public class HeaderOperationView extends HeaderViewInterface<List<OperationEntity>> {
 
-    @Bind(R.id.gv_operation)
+    @BindView(R.id.gv_operation)
     FixedGridView gvOperation;
 
     public HeaderOperationView(Activity context) {

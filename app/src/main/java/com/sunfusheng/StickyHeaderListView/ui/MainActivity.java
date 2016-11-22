@@ -35,7 +35,7 @@ import com.sunfusheng.StickyHeaderListView.view.SmoothListView.SmoothListView;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -45,19 +45,19 @@ import butterknife.ButterKnife;
  */
 public class MainActivity extends AppCompatActivity implements SmoothListView.ISmoothListViewListener {
 
-    @Bind(R.id.listView)
+    @BindView(R.id.listView)
     SmoothListView smoothListView;
-    @Bind(R.id.fv_top_filter)
+    @BindView(R.id.fv_top_filter)
     FilterView fvTopFilter;
-    @Bind(R.id.rl_bar)
+    @BindView(R.id.rl_bar)
     RelativeLayout rlBar;
-    @Bind(R.id.tv_title)
+    @BindView(R.id.tv_title)
     TextView tvTitle;
-    @Bind(R.id.view_title_bg)
+    @BindView(R.id.view_title_bg)
     View viewTitleBg;
-    @Bind(R.id.view_action_more_bg)
+    @BindView(R.id.view_action_more_bg)
     View viewActionMoreBg;
-    @Bind(R.id.fl_action_more)
+    @BindView(R.id.fl_action_more)
     FrameLayout flActionMore;
 
     private Context mContext;

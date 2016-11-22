@@ -12,7 +12,7 @@ import com.sunfusheng.StickyHeaderListView.model.FilterEntity;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -62,9 +62,9 @@ public class FilterOneAdapter extends BaseListAdapter<FilterEntity> {
     }
 
     static class ViewHolder {
-        @Bind(R.id.iv_image)
+        @BindView(R.id.iv_image)
         ImageView ivImage;
-        @Bind(R.id.tv_title)
+        @BindView(R.id.tv_title)
         TextView tvTitle;
 
         ViewHolder(View view) {

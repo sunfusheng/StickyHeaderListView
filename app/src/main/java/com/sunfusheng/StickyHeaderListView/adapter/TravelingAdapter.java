@@ -16,7 +16,7 @@ import com.sunfusheng.StickyHeaderListView.model.TravelingEntity;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -103,13 +103,13 @@ public class TravelingAdapter extends BaseListAdapter<TravelingEntity> {
     }
 
     static class ViewHolder {
-        @Bind(R.id.ll_root_view)
+        @BindView(R.id.ll_root_view)
         LinearLayout llRootView;
-        @Bind(R.id.iv_image)
+        @BindView(R.id.iv_image)
         ImageView ivImage;
-        @Bind(R.id.tv_title)
+        @BindView(R.id.tv_title)
         TextView tvTitle;
-        @Bind(R.id.tv_rank)
+        @BindView(R.id.tv_rank)
         TextView tvRank;
 
         ViewHolder(View view) {

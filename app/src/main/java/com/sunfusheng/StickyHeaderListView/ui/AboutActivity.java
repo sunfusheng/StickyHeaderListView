@@ -19,7 +19,7 @@ import android.webkit.WebViewClient;
 
 import com.sunfusheng.StickyHeaderListView.R;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -27,9 +27,9 @@ import butterknife.ButterKnife;
  */
 public class AboutActivity extends AppCompatActivity {
 
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @Bind(R.id.webView)
+    @BindView(R.id.webView)
     WebView webView;
 
     private WebSettings settings;

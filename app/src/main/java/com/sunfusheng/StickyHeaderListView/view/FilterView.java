@@ -22,7 +22,7 @@ import com.sunfusheng.StickyHeaderListView.model.FilterData;
 import com.sunfusheng.StickyHeaderListView.model.FilterEntity;
 import com.sunfusheng.StickyHeaderListView.model.FilterTwoEntity;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -30,33 +30,33 @@ import butterknife.ButterKnife;
  */
 public class FilterView extends LinearLayout implements View.OnClickListener {
 
-    @Bind(R.id.tv_category)
+    @BindView(R.id.tv_category)
     TextView tvCategory;
-    @Bind(R.id.iv_category_arrow)
+    @BindView(R.id.iv_category_arrow)
     ImageView ivCategoryArrow;
-    @Bind(R.id.tv_sort)
+    @BindView(R.id.tv_sort)
     TextView tvSort;
-    @Bind(R.id.iv_sort_arrow)
+    @BindView(R.id.iv_sort_arrow)
     ImageView ivSortArrow;
-    @Bind(R.id.tv_filter)
+    @BindView(R.id.tv_filter)
     TextView tvFilter;
-    @Bind(R.id.iv_filter_arrow)
+    @BindView(R.id.iv_filter_arrow)
     ImageView ivFilterArrow;
-    @Bind(R.id.ll_category)
+    @BindView(R.id.ll_category)
     LinearLayout llCategory;
-    @Bind(R.id.ll_sort)
+    @BindView(R.id.ll_sort)
     LinearLayout llSort;
-    @Bind(R.id.ll_filter)
+    @BindView(R.id.ll_filter)
     LinearLayout llFilter;
-    @Bind(R.id.lv_left)
+    @BindView(R.id.lv_left)
     ListView lvLeft;
-    @Bind(R.id.lv_right)
+    @BindView(R.id.lv_right)
     ListView lvRight;
-    @Bind(R.id.ll_head_layout)
+    @BindView(R.id.ll_head_layout)
     LinearLayout llHeadLayout;
-    @Bind(R.id.ll_content_list_view)
+    @BindView(R.id.ll_content_list_view)
     LinearLayout llContentListView;
-    @Bind(R.id.view_mask_bg)
+    @BindView(R.id.view_mask_bg)
     View viewMaskBg;
 
     private Context mContext;
