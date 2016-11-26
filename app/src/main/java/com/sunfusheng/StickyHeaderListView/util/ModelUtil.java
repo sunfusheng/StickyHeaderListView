@@ -25,7 +25,7 @@ public class ModelUtil {
     public static final String type_plant = "植物";
 
     // 广告数据
-    public static List<String> getAdData() {
+    public static List<String> getBannerData() {
         List<String> adList = new ArrayList<>();
         adList.add("http://img2.imgtn.bdimg.com/it/u=2850936076,2080165544&fm=206&gp=0.jpg");
         adList.add("http://img3.imgtn.bdimg.com/it/u=524208507,12616758&fm=206&gp=0.jpg");

@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.sunfusheng.StickyHeaderListView.R;
 import com.sunfusheng.StickyHeaderListView.model.TravelingEntity;
+import com.sunfusheng.StickyHeaderListView.util.ToastTip;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,9 +96,17 @@ public class TravelingAdapter extends BaseListAdapter<TravelingEntity> {
             return convertView;
         }
 
-        holder.tvTitle.setText(entity.getFrom() + entity.getTitle() + entity.getType());
+        final String title = entity.getFrom() + entity.getTitle() + entity.getType();
+        holder.tvTitle.setText(title);
         holder.tvRank.setText("排名：" + entity.getRank());
         mImageManager.loadUrlImage(entity.getImage_url(), holder.ivImage);
+
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ToastTip.show(mContext, title);
+            }
+        });
 
         return convertView;
     }

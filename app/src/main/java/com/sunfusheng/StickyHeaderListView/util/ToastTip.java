@@ -12,7 +12,7 @@ public class ToastTip {
     private static Toast mToast;
 
     public static void show(Context context, String message) {
-        if (TextUtils.isEmpty(message)) return;
+        if (context == null || TextUtils.isEmpty(message)) return;
         int duration;
         if (message.length() > 10) {
             duration = Toast.LENGTH_LONG; //如果字符串比较长，那么显示的时间也长一些。
