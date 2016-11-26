@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -61,19 +63,25 @@ public class FilterView extends LinearLayout implements View.OnClickListener {
 
     private Context mContext;
     private Activity mActivity;
-    private boolean isShowing = false;
+
     private int filterPosition = -1;
+    private int lastFilterPosition = -1;
+    public static final int POSITION_CATEGORY = 0; // 分类的位置
+    public static final int POSITION_SORT = 1; // 排序的位置
+    public static final int POSITION_FILTER = 2; // 筛选的位置
+
+    private boolean isShowing = false;
     private int panelHeight;
     private FilterData filterData;
-
-    private FilterTwoEntity selectedCategoryEntity; // 被选择的分类项
-    private FilterEntity selectedSortEntity; // 被选择的排序项
-    private FilterEntity selectedFilterEntity; // 被选择的筛选项
 
     private FilterLeftAdapter leftAdapter;
     private FilterRightAdapter rightAdapter;
     private FilterOneAdapter sortAdapter;
     private FilterOneAdapter filterAdapter;
+
+    private FilterTwoEntity selectedCategoryEntity; // 被选择的分类项
+    private FilterEntity selectedSortEntity; // 被选择的排序项
+    private FilterEntity selectedFilterEntity; // 被选择的筛选项
 
     public FilterView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -90,13 +98,8 @@ public class FilterView extends LinearLayout implements View.OnClickListener {
         View view = LayoutInflater.from(context).inflate(R.layout.view_filter_layout, this);
         ButterKnife.bind(this, view);
 
-        initData();
         initView();
         initListener();
-    }
-
-    private void initData() {
-
     }
 
     private void initView() {
@@ -142,7 +145,6 @@ public class FilterView extends LinearLayout implements View.OnClickListener {
                 hide();
                 break;
         }
-
     }
 
     // 复位筛选的显示状态
@@ -163,29 +165,10 @@ public class FilterView extends LinearLayout implements View.OnClickListener {
         hide();
     }
 
-    // 显示筛选布局
-    public void showFilterLayout(int position) {
-        resetFilterStatus();
-        switch (position) {
-            case 0:
-                setCategoryAdapter();
-                break;
-            case 1:
-                setSortAdapter();
-                break;
-            case 2:
-                setFilterAdapter();
-                break;
-        }
-
-        if (isShowing) return ;
-        show();
-    }
-
     // 设置分类数据
     private void setCategoryAdapter() {
         tvCategory.setTextColor(mActivity.getResources().getColor(R.color.colorPrimary));
-        ivCategoryArrow.setImageResource(R.mipmap.home_up_arrow);
+        ivCategoryArrow.setImageResource(R.mipmap.home_down_arrow_red);
         lvLeft.setVisibility(VISIBLE);
         lvRight.setVisibility(VISIBLE);
 
@@ -244,7 +227,7 @@ public class FilterView extends LinearLayout implements View.OnClickListener {
     // 设置排序数据
     private void setSortAdapter() {
         tvSort.setTextColor(mActivity.getResources().getColor(R.color.colorPrimary));
-        ivSortArrow.setImageResource(R.mipmap.home_up_arrow);
+        ivSortArrow.setImageResource(R.mipmap.home_down_arrow_red);
         lvLeft.setVisibility(GONE);
         lvRight.setVisibility(VISIBLE);
         sortAdapter = new FilterOneAdapter(mContext, filterData.getSorts());
@@ -265,7 +248,7 @@ public class FilterView extends LinearLayout implements View.OnClickListener {
     // 设置筛选数据
     private void setFilterAdapter() {
         tvFilter.setTextColor(mActivity.getResources().getColor(R.color.colorPrimary));
-        ivFilterArrow.setImageResource(R.mipmap.home_up_arrow);
+        ivFilterArrow.setImageResource(R.mipmap.home_down_arrow_red);
         lvLeft.setVisibility(GONE);
         lvRight.setVisibility(VISIBLE);
         filterAdapter = new FilterOneAdapter(mContext, filterData.getFilters());
@@ -284,7 +267,27 @@ public class FilterView extends LinearLayout implements View.OnClickListener {
     }
 
     // 动画显示
-    private void show() {
+    public void show(int position) {
+        resetFilterStatus();
+        if (lastFilterPosition != position) {
+            rotateArrowDown(lastFilterPosition);
+            lastFilterPosition = position;
+        }
+        rotateArrowUp(position);
+
+        switch (position) {
+            case 0:
+                setCategoryAdapter();
+                break;
+            case 1:
+                setSortAdapter();
+                break;
+            case 2:
+                setFilterAdapter();
+                break;
+        }
+
+        if (isShowing) return ;
         isShowing = true;
         viewMaskBg.setVisibility(VISIBLE);
         llContentListView.setVisibility(VISIBLE);
@@ -302,8 +305,82 @@ public class FilterView extends LinearLayout implements View.OnClickListener {
     public void hide() {
         isShowing = false;
         resetFilterStatus();
+        rotateArrowDown(filterPosition);
+        rotateArrowDown(lastFilterPosition);
         viewMaskBg.setVisibility(View.GONE);
         ObjectAnimator.ofFloat(llContentListView, "translationY", 0, -panelHeight).setDuration(200).start();
+    }
+
+    // 旋转箭头向上
+    private void rotateArrowUp(int position) {
+        switch (position) {
+            case POSITION_CATEGORY:
+                rotateArrowUpAnimation(ivCategoryArrow);
+                break;
+            case POSITION_SORT:
+                rotateArrowUpAnimation(ivSortArrow);
+                break;
+            case POSITION_FILTER:
+                rotateArrowUpAnimation(ivFilterArrow);
+                break;
+        }
+    }
+
+    // 旋转箭头向下
+    private void rotateArrowDown(int position) {
+        switch (position) {
+            case POSITION_CATEGORY:
+                rotateArrowDownAnimation(ivCategoryArrow);
+                break;
+            case POSITION_SORT:
+                rotateArrowDownAnimation(ivSortArrow);
+                break;
+            case POSITION_FILTER:
+                rotateArrowDownAnimation(ivFilterArrow);
+                break;
+        }
+    }
+
+    // 旋转箭头向上
+    public static void rotateArrowUpAnimation(final ImageView iv) {
+        if (iv == null) return;
+        RotateAnimation animation = new RotateAnimation(0f, 180f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        animation.setDuration(200);
+        animation.setFillAfter(true);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {}
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+            }
+        });
+        iv.startAnimation(animation);
+    }
+
+    // 旋转箭头向下
+    public static void rotateArrowDownAnimation(final ImageView iv) {
+        if (iv == null) return;
+        RotateAnimation animation = new RotateAnimation(180f, 0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        animation.setDuration(200);
+        animation.setFillAfter(true);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {}
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+            }
+        });
+        iv.startAnimation(animation);
     }
 
     // 设置筛选数据
@@ -315,6 +392,10 @@ public class FilterView extends LinearLayout implements View.OnClickListener {
     // 是否显示
     public boolean isShowing() {
         return isShowing;
+    }
+
+    public int getFilterPosition() {
+        return filterPosition;
     }
 
     // 筛选视图点击

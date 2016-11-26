@@ -47,8 +47,8 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
 
     @BindView(R.id.listView)
     SmoothListView smoothListView;
-    @BindView(R.id.fv_top_filter)
-    FilterView fvTopFilter;
+    @BindView(R.id.filterView)
+    FilterView filterView;
     @BindView(R.id.rl_bar)
     RelativeLayout rlBar;
     @BindView(R.id.tv_title)
@@ -125,11 +125,6 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
     }
 
     private void initView() {
-        fvTopFilter.setVisibility(View.GONE);
-
-        // 设置筛选数据
-        fvTopFilter.setFilterData(mActivity, filterData);
-
         // 设置广告数据
         headerBannerView = new HeaderBannerView(this);
         headerBannerView.fillView(bannerList, smoothListView);
@@ -146,9 +141,13 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
         headerDividerView = new HeaderDividerView(this);
         headerDividerView.fillView("", smoothListView);
 
-        // 设置筛选数据
+        // 设置假FilterView数据
         headerFilterView = new HeaderFilterView(this);
         headerFilterView.fillView(new Object(), smoothListView);
+
+        // 设置真FilterView数据
+        filterView.setFilterData(mActivity, filterData);
+        filterView.setVisibility(View.GONE);
 
         // 设置ListView数据
         mAdapter = new TravelingAdapter(this, travelingList);
@@ -177,12 +176,12 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
         });
 
         // (真正的)筛选视图点击
-        fvTopFilter.setOnFilterClickListener(new FilterView.OnFilterClickListener() {
+        filterView.setOnFilterClickListener(new FilterView.OnFilterClickListener() {
             @Override
             public void onFilterClick(int position) {
                 if (isStickyTop) {
                     filterPosition = position;
-                    fvTopFilter.showFilterLayout(position);
+                    filterView.show(position);
                     if (titleViewHeight - 3 > filterViewTopMargin || filterViewTopMargin > titleViewHeight + 3) {
                         smoothListView.smoothScrollToPositionFromTop(filterViewPosition, DensityUtil.dip2px(mContext, titleViewHeight));
                     }
@@ -191,7 +190,7 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
         });
 
         // 分类Item点击
-        fvTopFilter.setOnItemCategoryClickListener(new FilterView.OnItemCategoryClickListener() {
+        filterView.setOnItemCategoryClickListener(new FilterView.OnItemCategoryClickListener() {
             @Override
             public void onItemCategoryClick(FilterTwoEntity entity) {
                 fillAdapter(ModelUtil.getCategoryTravelingData(entity));
@@ -199,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
         });
 
         // 排序Item点击
-        fvTopFilter.setOnItemSortClickListener(new FilterView.OnItemSortClickListener() {
+        filterView.setOnItemSortClickListener(new FilterView.OnItemSortClickListener() {
             @Override
             public void onItemSortClick(FilterEntity entity) {
                 fillAdapter(ModelUtil.getSortTravelingData(entity));
@@ -207,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
         });
 
         // 筛选Item点击
-        fvTopFilter.setOnItemFilterClickListener(new FilterView.OnItemFilterClickListener() {
+        filterView.setOnItemFilterClickListener(new FilterView.OnItemFilterClickListener() {
             @Override
             public void onItemFilterClick(FilterEntity entity) {
                 fillAdapter(ModelUtil.getFilterTravelingData(entity));
@@ -250,15 +249,15 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
                 // 处理筛选是否吸附在顶部
                 if (filterViewTopMargin <= titleViewHeight || firstVisibleItem > filterViewPosition) {
                     isStickyTop = true; // 吸附在顶部
-                    fvTopFilter.setVisibility(View.VISIBLE);
+                    filterView.setVisibility(View.VISIBLE);
                 } else {
                     isStickyTop = false; // 没有吸附在顶部
-                    fvTopFilter.setVisibility(View.GONE);
+                    filterView.setVisibility(View.GONE);
                 }
 
                 if (isSmooth && isStickyTop) {
                     isSmooth = false;
-                    fvTopFilter.showFilterLayout(filterPosition);
+                    filterView.show(filterPosition);
                 }
 
                 // 处理标题栏颜色渐变
@@ -321,10 +320,10 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
 
     @Override
     public void onBackPressed() {
-        if (!fvTopFilter.isShowing()) {
+        if (!filterView.isShowing()) {
             super.onBackPressed();
         } else {
-            fvTopFilter.resetAllStatus();
+            filterView.resetAllStatus();
         }
     }
 
