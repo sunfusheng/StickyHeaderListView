@@ -11,7 +11,6 @@ public class FilterTwoEntity implements Serializable {
     private String type;
     private List<FilterEntity> list;
     private boolean isSelected;
-    private FilterEntity selectedFilterEntity;
 
     public FilterTwoEntity() {
     }
@@ -27,14 +26,6 @@ public class FilterTwoEntity implements Serializable {
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    public FilterEntity getSelectedFilterEntity() {
-        return selectedFilterEntity;
-    }
-
-    public void setSelectedFilterEntity(FilterEntity selectedFilterEntity) {
-        this.selectedFilterEntity = selectedFilterEntity;
     }
 
     public boolean isSelected() {

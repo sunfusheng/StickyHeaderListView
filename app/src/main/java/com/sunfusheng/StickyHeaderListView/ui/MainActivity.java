@@ -192,8 +192,8 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
         // 分类Item点击
         filterView.setOnItemCategoryClickListener(new FilterView.OnItemCategoryClickListener() {
             @Override
-            public void onItemCategoryClick(FilterTwoEntity entity) {
-                fillAdapter(ModelUtil.getCategoryTravelingData(entity));
+            public void onItemCategoryClick(FilterTwoEntity leftEntity, FilterEntity rightEntity) {
+                fillAdapter(ModelUtil.getCategoryTravelingData(leftEntity, rightEntity));
             }
         });
 

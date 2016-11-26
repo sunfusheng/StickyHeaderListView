@@ -20,20 +20,13 @@ import butterknife.ButterKnife;
  */
 public class FilterRightAdapter extends BaseListAdapter<FilterEntity> {
 
-    private FilterEntity selectedEntity;
-
-    public FilterRightAdapter(Context context) {
-        super(context);
-    }
-
     public FilterRightAdapter(Context context, List<FilterEntity> list) {
         super(context, list);
     }
 
     public void setSelectedEntity(FilterEntity filterEntity) {
-        this.selectedEntity = filterEntity;
         for (FilterEntity entity : getData()) {
-            entity.setSelected(entity.getKey().equals(selectedEntity.getKey()));
+            entity.setSelected(filterEntity != null && entity.getKey().equals(filterEntity.getKey()));
         }
         notifyDataSetChanged();
     }

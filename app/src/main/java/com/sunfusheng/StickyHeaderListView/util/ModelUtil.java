@@ -113,13 +113,12 @@ public class ModelUtil {
     }
 
     // ListView分类数据
-    public static List<TravelingEntity> getCategoryTravelingData(FilterTwoEntity entity) {
+    public static List<TravelingEntity> getCategoryTravelingData(FilterTwoEntity leftEntity, FilterEntity rightEntity) {
         List<TravelingEntity> list = getTravelingData();
         List<TravelingEntity> travelingList = new ArrayList<>();
         int size = list.size();
         for (int i=0; i<size; i++) {
-            if (list.get(i).getType().equals(entity.getType()) &&
-                    list.get(i).getFrom().equals(entity.getSelectedFilterEntity().getKey())) {
+            if (list.get(i).getType().equals(leftEntity.getType()) && list.get(i).getFrom().equals(rightEntity.getKey())) {
                 travelingList.add(list.get(i));
             }
         }

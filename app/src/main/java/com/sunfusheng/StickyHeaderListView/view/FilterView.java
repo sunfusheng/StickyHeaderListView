@@ -32,16 +32,16 @@ import butterknife.ButterKnife;
  */
 public class FilterView extends LinearLayout implements View.OnClickListener {
 
-    @BindView(R.id.tv_category)
-    TextView tvCategory;
+    @BindView(R.id.tv_category_title)
+    TextView tvCategoryTitle;
     @BindView(R.id.iv_category_arrow)
     ImageView ivCategoryArrow;
-    @BindView(R.id.tv_sort)
-    TextView tvSort;
+    @BindView(R.id.tv_sort_title)
+    TextView tvSortTitle;
     @BindView(R.id.iv_sort_arrow)
     ImageView ivSortArrow;
-    @BindView(R.id.tv_filter)
-    TextView tvFilter;
+    @BindView(R.id.tv_filter_title)
+    TextView tvFilterTitle;
     @BindView(R.id.iv_filter_arrow)
     ImageView ivFilterArrow;
     @BindView(R.id.ll_category)
@@ -79,7 +79,8 @@ public class FilterView extends LinearLayout implements View.OnClickListener {
     private FilterOneAdapter sortAdapter;
     private FilterOneAdapter filterAdapter;
 
-    private FilterTwoEntity selectedCategoryEntity; // 被选择的分类项
+    private FilterTwoEntity leftSelectedCategoryEntity; // 被选择的分类项左侧数据
+    private FilterEntity rightSelectedCategoryEntity; // 被选择的分类项右侧数据
     private FilterEntity selectedSortEntity; // 被选择的排序项
     private FilterEntity selectedFilterEntity; // 被选择的筛选项
 
@@ -149,13 +150,13 @@ public class FilterView extends LinearLayout implements View.OnClickListener {
 
     // 复位筛选的显示状态
     public void resetFilterStatus() {
-        tvCategory.setTextColor(mContext.getResources().getColor(R.color.font_black_2));
+        tvCategoryTitle.setTextColor(mContext.getResources().getColor(R.color.font_black_2));
         ivCategoryArrow.setImageResource(R.mipmap.home_down_arrow);
 
-        tvSort.setTextColor(mContext.getResources().getColor(R.color.font_black_2));
+        tvSortTitle.setTextColor(mContext.getResources().getColor(R.color.font_black_2));
         ivSortArrow.setImageResource(R.mipmap.home_down_arrow);
 
-        tvFilter.setTextColor(mContext.getResources().getColor(R.color.font_black_2));
+        tvFilterTitle.setTextColor(mContext.getResources().getColor(R.color.font_black_2));
         ivFilterArrow.setImageResource(R.mipmap.home_down_arrow);
     }
 
@@ -167,101 +168,85 @@ public class FilterView extends LinearLayout implements View.OnClickListener {
 
     // 设置分类数据
     private void setCategoryAdapter() {
-        tvCategory.setTextColor(mActivity.getResources().getColor(R.color.colorPrimary));
-        ivCategoryArrow.setImageResource(R.mipmap.home_down_arrow_red);
         lvLeft.setVisibility(VISIBLE);
         lvRight.setVisibility(VISIBLE);
-
-        if (selectedCategoryEntity == null) {
-            selectedCategoryEntity = filterData.getCategory().get(0);
-        }
 
         // 左边列表视图
         leftAdapter = new FilterLeftAdapter(mContext, filterData.getCategory());
         lvLeft.setAdapter(leftAdapter);
-        leftAdapter.setSelectedEntity(selectedCategoryEntity);
+        if (leftSelectedCategoryEntity == null) {
+            leftSelectedCategoryEntity = filterData.getCategory().get(0);
+        }
+        leftAdapter.setSelectedEntity(leftSelectedCategoryEntity);
 
         lvLeft.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectedCategoryEntity = filterData.getCategory().get(position);
-                leftAdapter.setSelectedEntity(selectedCategoryEntity);
+                leftSelectedCategoryEntity = filterData.getCategory().get(position);
+                leftAdapter.setSelectedEntity(leftSelectedCategoryEntity);
 
                 // 右边列表视图
-                rightAdapter = new FilterRightAdapter(mContext, selectedCategoryEntity.getList());
+                rightAdapter = new FilterRightAdapter(mContext, leftSelectedCategoryEntity.getList());
                 lvRight.setAdapter(rightAdapter);
-                lvRight.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        selectedCategoryEntity.setSelectedFilterEntity(selectedCategoryEntity.getList().get(position));
-                        rightAdapter.setSelectedEntity(selectedCategoryEntity.getSelectedFilterEntity());
-                        hide();
-                        if (onItemCategoryClickListener != null) {
-                            onItemCategoryClickListener.onItemCategoryClick(selectedCategoryEntity);
-                        }
-                    }
-                });
+                rightAdapter.setSelectedEntity(rightSelectedCategoryEntity);
             }
         });
 
-        // 如果右边有选中的数据，设置
-        if (selectedCategoryEntity.getSelectedFilterEntity() != null) {
-            rightAdapter = new FilterRightAdapter(mContext, selectedCategoryEntity.getList());
-        } else {
-            rightAdapter = new FilterRightAdapter(mContext, filterData.getCategory().get(0).getList());
-        }
+        // 右边列表视图
+        rightAdapter = new FilterRightAdapter(mContext, leftSelectedCategoryEntity.getList());
         lvRight.setAdapter(rightAdapter);
+        rightAdapter.setSelectedEntity(rightSelectedCategoryEntity);
         lvRight.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectedCategoryEntity.setSelectedFilterEntity(selectedCategoryEntity.getList().get(position));
-                rightAdapter.setSelectedEntity(selectedCategoryEntity.getSelectedFilterEntity());
-                hide();
+                rightSelectedCategoryEntity = leftSelectedCategoryEntity.getList().get(position);
+                rightAdapter.setSelectedEntity(rightSelectedCategoryEntity);
                 if (onItemCategoryClickListener != null) {
-                    onItemCategoryClickListener.onItemCategoryClick(selectedCategoryEntity);
+                    onItemCategoryClickListener.onItemCategoryClick(leftSelectedCategoryEntity, rightSelectedCategoryEntity);
                 }
+                hide();
             }
         });
     }
 
     // 设置排序数据
     private void setSortAdapter() {
-        tvSort.setTextColor(mActivity.getResources().getColor(R.color.colorPrimary));
-        ivSortArrow.setImageResource(R.mipmap.home_down_arrow_red);
         lvLeft.setVisibility(GONE);
         lvRight.setVisibility(VISIBLE);
+
         sortAdapter = new FilterOneAdapter(mContext, filterData.getSorts());
         lvRight.setAdapter(sortAdapter);
+
         lvRight.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectedSortEntity = filterData.getSorts().get(position);
                 sortAdapter.setSelectedEntity(selectedSortEntity);
-                hide();
                 if (onItemSortClickListener != null) {
                     onItemSortClickListener.onItemSortClick(selectedSortEntity);
                 }
+                hide();
             }
         });
     }
 
     // 设置筛选数据
     private void setFilterAdapter() {
-        tvFilter.setTextColor(mActivity.getResources().getColor(R.color.colorPrimary));
-        ivFilterArrow.setImageResource(R.mipmap.home_down_arrow_red);
         lvLeft.setVisibility(GONE);
         lvRight.setVisibility(VISIBLE);
+
         filterAdapter = new FilterOneAdapter(mContext, filterData.getFilters());
         lvRight.setAdapter(filterAdapter);
+
         lvRight.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectedFilterEntity = filterData.getFilters().get(position);
                 filterAdapter.setSelectedEntity(selectedFilterEntity);
-                hide();
                 if (onItemFilterClickListener != null) {
                     onItemFilterClickListener.onItemFilterClick(selectedFilterEntity);
                 }
+                hide();
             }
         });
     }
@@ -276,13 +261,19 @@ public class FilterView extends LinearLayout implements View.OnClickListener {
         rotateArrowUp(position);
 
         switch (position) {
-            case 0:
+            case POSITION_CATEGORY:
+                tvCategoryTitle.setTextColor(mActivity.getResources().getColor(R.color.colorPrimary));
+                ivCategoryArrow.setImageResource(R.mipmap.home_down_arrow_red);
                 setCategoryAdapter();
                 break;
-            case 1:
+            case POSITION_SORT:
+                tvSortTitle.setTextColor(mActivity.getResources().getColor(R.color.colorPrimary));
+                ivSortArrow.setImageResource(R.mipmap.home_down_arrow_red);
                 setSortAdapter();
                 break;
-            case 2:
+            case POSITION_FILTER:
+                tvFilterTitle.setTextColor(mActivity.getResources().getColor(R.color.colorPrimary));
+                ivFilterArrow.setImageResource(R.mipmap.home_down_arrow_red);
                 setFilterAdapter();
                 break;
         }
@@ -413,7 +404,7 @@ public class FilterView extends LinearLayout implements View.OnClickListener {
         this.onItemCategoryClickListener = onItemCategoryClickListener;
     }
     public interface OnItemCategoryClickListener {
-        void onItemCategoryClick(FilterTwoEntity entity);
+        void onItemCategoryClick(FilterTwoEntity leftEntity, FilterEntity rightEntity);
     }
 
     // 排序Item点击
