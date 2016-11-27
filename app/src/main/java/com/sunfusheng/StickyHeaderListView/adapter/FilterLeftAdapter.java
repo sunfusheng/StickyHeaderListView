@@ -1,7 +1,6 @@
 package com.sunfusheng.StickyHeaderListView.adapter;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -20,8 +19,6 @@ import butterknife.ButterKnife;
  */
 public class FilterLeftAdapter extends BaseListAdapter<FilterTwoEntity> {
 
-    private FilterTwoEntity selectedEntity;
-
     public FilterLeftAdapter(Context context) {
         super(context);
     }
@@ -31,9 +28,8 @@ public class FilterLeftAdapter extends BaseListAdapter<FilterTwoEntity> {
     }
 
     public void setSelectedEntity(FilterTwoEntity filterEntity) {
-        this.selectedEntity = filterEntity;
         for (FilterTwoEntity entity : getData()) {
-            entity.setSelected(entity.getType().equals(selectedEntity.getType()));
+            entity.setSelected(filterEntity != null && entity.getType().equals(filterEntity.getType()));
         }
         notifyDataSetChanged();
     }
@@ -42,7 +38,7 @@ public class FilterLeftAdapter extends BaseListAdapter<FilterTwoEntity> {
     public View getView(int position, View convertView, ViewGroup parent) {
         final ViewHolder holder;
         if (convertView == null) {
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_filter_left, null);
+            convertView = mInflater.inflate(R.layout.item_filter_left, null);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         } else {

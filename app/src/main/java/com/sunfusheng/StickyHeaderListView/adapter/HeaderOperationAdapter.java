@@ -2,7 +2,6 @@ package com.sunfusheng.StickyHeaderListView.adapter;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -33,7 +32,7 @@ public class HeaderOperationAdapter extends BaseListAdapter<OperationEntity> {
     public View getView(int position, View convertView, ViewGroup parent) {
         final ViewHolder holder;
         if (convertView == null) {
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_operation, null);
+            convertView = mInflater.inflate(R.layout.item_operation, null);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         } else {

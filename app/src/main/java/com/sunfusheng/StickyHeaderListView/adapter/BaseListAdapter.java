@@ -25,8 +25,6 @@ public abstract class BaseListAdapter<E> extends BaseAdapter {
     public BaseListAdapter(Context context, List<E> list) {
         this(context);
         mList = list;
-        mInflater = LayoutInflater.from(context);
-        mImageManager = new ImageManager(context);
     }
 
     @Override
@@ -42,11 +40,9 @@ public abstract class BaseListAdapter<E> extends BaseAdapter {
         return mList;
     }
 
-    public void addALL(List<E> lists){
-        if(lists==null||lists.size()==0){
-            return ;
-        }
-        mList.addAll(lists);
+    public void addALL(List<E> list){
+        if(list==null||list.size()==0) return;
+        mList.addAll(list);
     }
     public void add(E item){
         mList.add(item);
