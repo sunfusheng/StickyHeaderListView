@@ -253,12 +253,11 @@ public class FilterView extends LinearLayout implements View.OnClickListener {
 
     // 动画显示
     public void show(int position) {
+        if (isShowing && lastFilterPosition == position) return;
         resetFilterStatus();
-        if (lastFilterPosition != position) {
-            rotateArrowDown(lastFilterPosition);
-            lastFilterPosition = position;
-        }
         rotateArrowUp(position);
+        rotateArrowDown(lastFilterPosition);
+        lastFilterPosition = position;
 
         switch (position) {
             case POSITION_CATEGORY:
@@ -298,6 +297,8 @@ public class FilterView extends LinearLayout implements View.OnClickListener {
         resetFilterStatus();
         rotateArrowDown(filterPosition);
         rotateArrowDown(lastFilterPosition);
+        filterPosition = -1;
+        lastFilterPosition = -1;
         viewMaskBg.setVisibility(View.GONE);
         ObjectAnimator.ofFloat(llContentListView, "translationY", 0, -panelHeight).setDuration(200).start();
     }
