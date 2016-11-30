@@ -113,7 +113,6 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
         filterData.setCategory(ModelUtil.getCategoryData());
         filterData.setSorts(ModelUtil.getSortData());
         filterData.setFilters(ModelUtil.getFilterData());
-
         // 广告数据
         bannerList = ModelUtil.getBannerData();
         // 频道数据
