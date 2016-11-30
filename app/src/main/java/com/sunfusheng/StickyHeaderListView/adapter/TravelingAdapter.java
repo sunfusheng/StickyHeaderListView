@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.sunfusheng.StickyHeaderListView.R;
 import com.sunfusheng.StickyHeaderListView.model.TravelingEntity;
-import com.sunfusheng.StickyHeaderListView.util.ToastTip;
+import com.sunfusheng.StickyHeaderListView.util.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,7 +104,7 @@ public class TravelingAdapter extends BaseListAdapter<TravelingEntity> {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ToastTip.show(mContext, title);
+                ToastUtil.show(mContext, title);
             }
         });
 

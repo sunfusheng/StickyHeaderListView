@@ -8,7 +8,7 @@ import android.widget.ListView;
 import com.sunfusheng.StickyHeaderListView.R;
 import com.sunfusheng.StickyHeaderListView.adapter.HeaderOperationAdapter;
 import com.sunfusheng.StickyHeaderListView.model.OperationEntity;
-import com.sunfusheng.StickyHeaderListView.util.ToastTip;
+import com.sunfusheng.StickyHeaderListView.util.ToastUtil;
 
 import java.util.List;
 
@@ -37,13 +37,16 @@ public class HeaderOperationView extends HeaderViewInterface<List<OperationEntit
     }
 
     private void dealWithTheView(List<OperationEntity> list) {
-        final HeaderOperationAdapter adapter = new HeaderOperationAdapter(mContext, list);
+        if (list == null || list.size() < 2 || list.size() > 6) return;
+        if (list.size()%2 != 0) return;
+
+        final HeaderOperationAdapter adapter = new HeaderOperationAdapter(mActivity, list);
         gvOperation.setAdapter(adapter);
 
         gvOperation.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ToastTip.show(mContext, adapter.getItem(position).getTitle());
+                ToastUtil.show(mActivity, adapter.getItem(position).getTitle());
             }
         });
     }

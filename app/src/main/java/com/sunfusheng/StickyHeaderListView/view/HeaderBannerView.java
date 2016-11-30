@@ -39,6 +39,7 @@ public class HeaderBannerView extends HeaderViewInterface<List<String>> {
     private List<ImageView> ivList;
     private ImageManager mImageManager;
     private int bannerHeight;
+    private int bannerCount;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -69,8 +70,11 @@ public class HeaderBannerView extends HeaderViewInterface<List<String>> {
 
     private void dealWithTheView(List<String> list) {
         ivList.clear();
-        int size = list.size();
-        for (int i = 0; i < size; i++) {
+        bannerCount = list.size();
+        if (bannerCount == 2) {
+            list.addAll(list);
+        }
+        for (int i = 0; i < list.size(); i++) {
             ivList.add(createImageView(list.get(i)));
         }
 
@@ -78,17 +82,17 @@ public class HeaderBannerView extends HeaderViewInterface<List<String>> {
         layoutParams.height = bannerHeight;
         rlBanner.setLayoutParams(layoutParams);
 
-        HeaderBannerAdapter photoAdapter = new HeaderBannerAdapter(mContext, ivList);
+        HeaderBannerAdapter photoAdapter = new HeaderBannerAdapter(mActivity, ivList);
         vpBanner.setAdapter(photoAdapter);
 
-        addIndicatorImageViews(size);
-        setViewPagerChangeListener(size);
+        addIndicatorImageViews();
+        setViewPagerChangeListener();
         controlViewPagerSpeed(vpBanner, 500);
     }
 
     // 创建要显示的ImageView
     private ImageView createImageView(String url) {
-        ImageView imageView = new ImageView(mContext);
+        ImageView imageView = new ImageView(mActivity);
         AbsListView.LayoutParams params = new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         imageView.setLayoutParams(params);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -97,13 +101,14 @@ public class HeaderBannerView extends HeaderViewInterface<List<String>> {
     }
 
     // 添加指示图标
-    private void addIndicatorImageViews(int size) {
+    private void addIndicatorImageViews() {
         llIndexContainer.removeAllViews();
-        for (int i = 0; i < size; i++) {
-            ImageView iv = new ImageView(mContext);
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(DensityUtil.dip2px(mContext, 5), DensityUtil.dip2px(mContext, 5));
+        if (bannerCount < 2) return;
+        for (int i = 0; i < bannerCount; i++) {
+            ImageView iv = new ImageView(mActivity);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(DensityUtil.dip2px(mActivity, 5), DensityUtil.dip2px(mActivity, 5));
             if (i != 0) {
-                lp.leftMargin = DensityUtil.dip2px(mContext, 7);
+                lp.leftMargin = DensityUtil.dip2px(mActivity, 7);
             }
             iv.setLayoutParams(lp);
             iv.setBackgroundResource(R.drawable.xml_round_orange_grey_sel);
@@ -116,13 +121,13 @@ public class HeaderBannerView extends HeaderViewInterface<List<String>> {
     }
 
     // 为ViewPager设置监听器
-    private void setViewPagerChangeListener(final int size) {
+    private void setViewPagerChangeListener() {
         vpBanner.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
                 if (ivList != null && ivList.size() > 0) {
-                    int newPosition = position % size;
-                    for (int i = 0; i < size; i++) {
+                    int newPosition = position % bannerCount;
+                    for (int i = 0; i < bannerCount; i++) {
                         llIndexContainer.getChildAt(i).setEnabled(false);
                         if (i == newPosition) {
                             llIndexContainer.getChildAt(i).setEnabled(true);
@@ -159,7 +164,7 @@ public class HeaderBannerView extends HeaderViewInterface<List<String>> {
         try {
             Field field = ViewPager.class.getDeclaredField("mScroller");
             field.setAccessible(true);
-            FixedSpeedScroller scroller = new FixedSpeedScroller(mContext, new AccelerateDecelerateInterpolator());
+            FixedSpeedScroller scroller = new FixedSpeedScroller(mActivity, new AccelerateDecelerateInterpolator());
             scroller.setmDuration(speedTimeMillis);
             field.set(viewPager, scroller);
         } catch (Exception e) {

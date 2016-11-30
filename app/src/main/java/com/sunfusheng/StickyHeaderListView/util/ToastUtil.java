@@ -7,7 +7,7 @@ import android.widget.Toast;
 /**
  * Created by sunfusheng on 15/8/7.
  */
-public class ToastTip {
+public class ToastUtil {
 
     private static Toast mToast;
 

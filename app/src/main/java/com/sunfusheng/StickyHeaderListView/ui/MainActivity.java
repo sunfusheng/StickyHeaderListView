@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        StatusBarUtil.setStatusBarTrans(this, false);
+        StatusBarUtil.setStatusBarTranslucent(this, false);
 
         initData();
         initView();

@@ -8,13 +8,13 @@ import java.util.List;
 
 public abstract class HeaderViewInterface<T> {
 
-    protected Activity mContext;
+    protected Activity mActivity;
     protected LayoutInflater mInflate;
     protected T mEntity;
 
-    public HeaderViewInterface(Activity context) {
-        this.mContext = context;
-        mInflate = LayoutInflater.from(context);
+    public HeaderViewInterface(Activity activity) {
+        this.mActivity = activity;
+        mInflate = LayoutInflater.from(activity);
     }
 
     public boolean fillView(T t, ListView listView) {

@@ -8,7 +8,7 @@ import android.widget.ListView;
 import com.sunfusheng.StickyHeaderListView.R;
 import com.sunfusheng.StickyHeaderListView.adapter.HeaderChannelAdapter;
 import com.sunfusheng.StickyHeaderListView.model.ChannelEntity;
-import com.sunfusheng.StickyHeaderListView.util.ToastTip;
+import com.sunfusheng.StickyHeaderListView.util.ToastUtil;
 
 import java.util.List;
 
@@ -37,8 +37,8 @@ public class HeaderChannelView extends HeaderViewInterface<List<ChannelEntity>> 
     }
 
     private void dealWithTheView(final List<ChannelEntity> list) {
+        if (list == null || list.size() < 2) return;
         int size = list.size();
-
         if (size <= 4) {
             gvChannel.setNumColumns(size);
         } else if (size == 6) {
@@ -46,16 +46,16 @@ public class HeaderChannelView extends HeaderViewInterface<List<ChannelEntity>> 
         } else if (size == 8) {
             gvChannel.setNumColumns(4);
         } else {
-            gvChannel.setNumColumns(4);
+            return;
         }
 
-        final HeaderChannelAdapter adapter = new HeaderChannelAdapter(mContext, list);
+        final HeaderChannelAdapter adapter = new HeaderChannelAdapter(mActivity, list);
         gvChannel.setAdapter(adapter);
 
         gvChannel.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ToastTip.show(mContext, adapter.getItem(position).getTitle());
+                ToastUtil.show(mActivity, adapter.getItem(position).getTitle());
             }
         });
     }

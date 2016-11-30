@@ -16,11 +16,11 @@ import java.lang.reflect.Method;
 public class StatusBarUtil {
 
     // 设置状态栏透明与字体颜色
-    public static void setStatusBarTrans(Activity acitivty, boolean lightStatusBar) {
+    public static void setStatusBarTranslucent(Activity acitivty, boolean isLightStatusBar) {
+        Window window = acitivty.getWindow();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            acitivty.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        }else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = acitivty.getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                     | View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
@@ -28,76 +28,64 @@ public class StatusBarUtil {
             window.setStatusBarColor(Color.TRANSPARENT);
         }
 
-        ILightStatusBar IMPL;
-        if (MIUILightStatusBarImpl.isMe()) {
-            IMPL = new MIUILightStatusBarImpl();
-        } else if (MeizuLightStatusBarImpl.isMe()) {
-            IMPL = new MeizuLightStatusBarImpl();
-        } else {
-            IMPL = new ILightStatusBar() {
-                @Override
-                public void setLightStatusBar(Window window, boolean lightStatusBar) {
-                }
-            };
+        if (isXiaomi()) {
+            setXiaomiStatusBar(window, isLightStatusBar);
+        } else if (isMeizu()) {
+            setMeizuStatusBar(window, isLightStatusBar);
         }
-        IMPL.setLightStatusBar(acitivty.getWindow(), lightStatusBar);
     }
 
-    // 小米状态栏设置类
-    public static class MIUILightStatusBarImpl implements ILightStatusBar {
-        static boolean isMe() {
-            return "Xiaomi".equals(Build.MANUFACTURER);
-        }
+    // 是否是小米手机
+    public static boolean isXiaomi() {
+        return "Xiaomi".equals(Build.MANUFACTURER);
+    }
 
-        public void setLightStatusBar(Window window, boolean lightStatusBar) {
-            Class<? extends Window> clazz = window.getClass();
-            try {
-                Class<?> layoutParams = Class.forName("android.view.MiuiWindowManager$LayoutParams");
-                Field field = layoutParams.getField("EXTRA_FLAG_STATUS_BAR_DARK_MODE");
-                int darkModeFlag = field.getInt(layoutParams);
-                Method extraFlagField = clazz.getMethod("setExtraFlags", int.class, int.class);
-                extraFlagField.invoke(window, lightStatusBar ? darkModeFlag : 0, darkModeFlag);
-            } catch (Exception e) {
+    // 设置小米状态栏
+    public static void setXiaomiStatusBar(Window window, boolean isLightStatusBar) {
+        Class<? extends Window> clazz = window.getClass();
+        try {
+            Class<?> layoutParams = Class.forName("android.view.MiuiWindowManager$LayoutParams");
+            Field field = layoutParams.getField("EXTRA_FLAG_STATUS_BAR_DARK_MODE");
+            int darkModeFlag = field.getInt(layoutParams);
+            Method extraFlagField = clazz.getMethod("setExtraFlags", int.class, int.class);
+            extraFlagField.invoke(window, isLightStatusBar ? darkModeFlag : 0, darkModeFlag);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // 是否是魅族手机
+    public static boolean isMeizu() {
+        try {
+            Method method = Build.class.getMethod("hasSmartBar");
+            return method != null;
+        } catch (NoSuchMethodException e) {
+        }
+        return false;
+    }
+
+    // 设置魅族状态栏
+    public static void setMeizuStatusBar(Window window, boolean isLightStatusBar) {
+        WindowManager.LayoutParams params = window.getAttributes();
+        try {
+            Field darkFlag = WindowManager.LayoutParams.class.getDeclaredField("MEIZU_FLAG_DARK_STATUS_BAR_ICON");
+            Field meizuFlags = WindowManager.LayoutParams.class.getDeclaredField("meizuFlags");
+            darkFlag.setAccessible(true);
+            meizuFlags.setAccessible(true);
+            int bit = darkFlag.getInt(null);
+            int value = meizuFlags.getInt(params);
+            if (isLightStatusBar) {
+                value |= bit;
+            } else {
+                value &= ~bit;
             }
+            meizuFlags.setInt(params, value);
+            window.setAttributes(params);
+            darkFlag.setAccessible(false);
+            meizuFlags.setAccessible(false);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    // 魅族状态栏设置类
-    public static class MeizuLightStatusBarImpl implements ILightStatusBar {
-        static boolean isMe() {
-            final Method method;
-            try {
-                method = Build.class.getMethod("hasSmartBar");
-                return method != null;
-            } catch (NoSuchMethodException e) {
-            }
-            return false;
-        }
-
-        public void setLightStatusBar(Window window, boolean lightStatusBar) {
-            WindowManager.LayoutParams params = window.getAttributes();
-            try {
-                Field darkFlag = WindowManager.LayoutParams.class.getDeclaredField("MEIZU_FLAG_DARK_STATUS_BAR_ICON");
-                Field meizuFlags = WindowManager.LayoutParams.class.getDeclaredField("meizuFlags");
-                darkFlag.setAccessible(true);
-                meizuFlags.setAccessible(true);
-                int bit = darkFlag.getInt(null);
-                int value = meizuFlags.getInt(params);
-                if (lightStatusBar) {
-                    value |= bit;
-                } else {
-                    value &= ~bit;
-                }
-                meizuFlags.setInt(params, value);
-                window.setAttributes(params);
-                darkFlag.setAccessible(false);
-                meizuFlags.setAccessible(false);
-            } catch (Exception e) {
-            }
-        }
-    }
-
-    interface ILightStatusBar {
-        void setLightStatusBar(Window window, boolean lightStatusBar);
-    }
 }
