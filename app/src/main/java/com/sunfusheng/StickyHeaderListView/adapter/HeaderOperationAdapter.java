@@ -4,11 +4,11 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sunfusheng.StickyHeaderListView.R;
 import com.sunfusheng.StickyHeaderListView.model.OperationEntity;
+import com.sunfusheng.StickyHeaderListView.view.GildeImageView.GlideImageView;
 
 import java.util.List;
 
@@ -42,7 +42,8 @@ public class HeaderOperationAdapter extends BaseListAdapter<OperationEntity> {
         OperationEntity entity = getItem(position);
 
         holder.tvTitle.setText(entity.getTitle());
-        mImageManager.loadUrlImage(entity.getImage_url(), holder.ivImage);
+        holder.givImage.loadNetImage(entity.getImage_url(), R.color.font_black_6);
+
         if (TextUtils.isEmpty(entity.getSubtitle())) {
             holder.tvSubtitle.setVisibility(View.INVISIBLE);
         } else {
@@ -54,8 +55,8 @@ public class HeaderOperationAdapter extends BaseListAdapter<OperationEntity> {
     }
 
     static class ViewHolder {
-        @BindView(R.id.iv_image)
-        ImageView ivImage;
+        @BindView(R.id.giv_image)
+        GlideImageView givImage;
         @BindView(R.id.tv_title)
         TextView tvTitle;
         @BindView(R.id.tv_subtitle)

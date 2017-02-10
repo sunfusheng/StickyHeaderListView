@@ -13,8 +13,8 @@
             android:background="@drawable/ripple_item_clicked"
             android:padding="10dp">
 
-            <ImageView
-                android:id="@+id/iv_image"
+            <com.sunfusheng.StickyHeaderListView.view.GildeImageView.GlideImageView
+                android:id="@+id/giv_image"
                 android:layout_width="80dp"
                 android:layout_height="60dp"
                 android:scaleType="centerCrop"
@@ -24,9 +24,9 @@
                 android:id="@+id/tv_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignTop="@id/iv_image"
+                android:layout_alignTop="@id/giv_image"
                 android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@id/iv_image"
+                android:layout_toRightOf="@id/giv_image"
                 android:ellipsize="end"
                 android:gravity="top|start"
                 android:lineSpacingExtra="2dp"
@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_title"
                 android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@id/iv_image"
+                android:layout_toRightOf="@id/giv_image"
                 android:text="排名：23"
                 android:textColor="@color/font_black_5"
                 android:textSize="12sp"/>

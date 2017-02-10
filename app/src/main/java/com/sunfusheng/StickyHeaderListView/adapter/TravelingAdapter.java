@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -13,6 +12,7 @@ import android.widget.TextView;
 import com.sunfusheng.StickyHeaderListView.R;
 import com.sunfusheng.StickyHeaderListView.model.TravelingEntity;
 import com.sunfusheng.StickyHeaderListView.util.ToastUtil;
+import com.sunfusheng.StickyHeaderListView.view.GildeImageView.GlideImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,7 +99,7 @@ public class TravelingAdapter extends BaseListAdapter<TravelingEntity> {
         final String title = entity.getFrom() + entity.getTitle() + entity.getType();
         holder.tvTitle.setText(title);
         holder.tvRank.setText("排名：" + entity.getRank());
-        mImageManager.loadUrlImage(entity.getImage_url(), holder.ivImage);
+        holder.givImage.loadNetImage(entity.getImage_url(), R.color.font_black_6);
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,8 +114,8 @@ public class TravelingAdapter extends BaseListAdapter<TravelingEntity> {
     static class ViewHolder {
         @BindView(R.id.ll_root_view)
         LinearLayout llRootView;
-        @BindView(R.id.iv_image)
-        ImageView ivImage;
+        @BindView(R.id.giv_image)
+        GlideImageView givImage;
         @BindView(R.id.tv_title)
         TextView tvTitle;
         @BindView(R.id.tv_rank)

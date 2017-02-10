@@ -15,8 +15,8 @@ import android.widget.RelativeLayout;
 
 import com.sunfusheng.StickyHeaderListView.R;
 import com.sunfusheng.StickyHeaderListView.adapter.HeaderBannerAdapter;
-import com.sunfusheng.StickyHeaderListView.manager.ImageManager;
 import com.sunfusheng.StickyHeaderListView.util.DensityUtil;
+import com.sunfusheng.StickyHeaderListView.view.GildeImageView.GlideImageView;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -37,7 +37,6 @@ public class HeaderBannerView extends HeaderViewInterface<List<String>> {
     private static final int BANNER_TYPE = 0;
     private static final int BANNER_TIME = 5000; // ms
     private List<ImageView> ivList;
-    private ImageManager mImageManager;
     private int bannerHeight;
     private int bannerCount;
 
@@ -55,7 +54,6 @@ public class HeaderBannerView extends HeaderViewInterface<List<String>> {
     public HeaderBannerView(Activity context) {
         super(context);
         ivList = new ArrayList<>();
-        mImageManager = new ImageManager(context);
         bannerHeight = DensityUtil.getWindowWidth(context) * 9 / 16;
     }
 
@@ -92,11 +90,11 @@ public class HeaderBannerView extends HeaderViewInterface<List<String>> {
 
     // 创建要显示的ImageView
     private ImageView createImageView(String url) {
-        ImageView imageView = new ImageView(mActivity);
+        GlideImageView imageView = new GlideImageView(mActivity);
         AbsListView.LayoutParams params = new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         imageView.setLayoutParams(params);
+        imageView.loadNetImage(url, R.color.font_black_6);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        mImageManager.loadUrlImage(url, imageView);
         return imageView;
     }
 

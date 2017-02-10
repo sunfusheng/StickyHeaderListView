@@ -6,8 +6,8 @@
     android:background="@drawable/ripple_item_clicked_with_mask"
     android:minHeight="72.5dp">
 
-    <ImageView
-        android:id="@+id/iv_image"
+    <com.sunfusheng.StickyHeaderListView.view.GildeImageView.GlideImageView
+        android:id="@+id/giv_image"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_centerVertical="true"
@@ -19,11 +19,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_alignTop="@id/iv_image"
+        android:layout_alignTop="@id/giv_image"
         android:layout_centerVertical="true"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="15dp"
-        android:layout_toRightOf="@id/iv_image"
+        android:layout_toRightOf="@id/giv_image"
         android:gravity="right"
         android:orientation="vertical">
 

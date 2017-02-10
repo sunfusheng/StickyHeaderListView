@@ -4,11 +4,11 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sunfusheng.StickyHeaderListView.R;
 import com.sunfusheng.StickyHeaderListView.model.ChannelEntity;
+import com.sunfusheng.StickyHeaderListView.view.GildeImageView.GlideImageView;
 
 import java.util.List;
 
@@ -38,7 +38,8 @@ public class HeaderChannelAdapter extends BaseListAdapter<ChannelEntity> {
         ChannelEntity entity = getItem(position);
 
         holder.tvTitle.setText(entity.getTitle());
-        mImageManager.loadCircleImage(entity.getImage_url(), holder.ivImage);
+        holder.givImage.loadNetCircleImage(entity.getImage_url(), R.color.font_black_6);
+
         if (TextUtils.isEmpty(entity.getTips())) {
             holder.tvTips.setVisibility(View.INVISIBLE);
         } else {
@@ -50,8 +51,8 @@ public class HeaderChannelAdapter extends BaseListAdapter<ChannelEntity> {
     }
 
     static class ViewHolder {
-        @BindView(R.id.iv_image)
-        ImageView ivImage;
+        @BindView(R.id.giv_image)
+        GlideImageView givImage;
         @BindView(R.id.tv_title)
         TextView tvTitle;
         @BindView(R.id.tv_tips)

@@ -1,4 +1,4 @@
-package com.sunfusheng.StickyHeaderListView.view;
+package com.sunfusheng.StickyHeaderListView.view.GildeImageView;
 
 import android.content.Context;
 import android.graphics.Bitmap;
