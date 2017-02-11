@@ -4,7 +4,7 @@
 StickyHeaderListView是基于实际需求做出的灵活可变的UI视图，具体实现了如下功能：  
 一、支持下拉刷新和上拉加载更多功能。  
 二、支持无限循环的广告位。  
-三、使用GridView实现可动态配置的频道位、运营位和分割线。  
+三、使用GridView实现可动态配置的频道位、运营位。  
 四、自定义FilterView实现筛选功能，同时支持动画显示与动画隐藏。  
 五、支持FilterView滑动到顶部后吸附悬浮。  
 六、支持标题栏背景颜色渐变和字体颜色渐变。  
@@ -19,7 +19,7 @@ StickyHeaderListView是基于实际需求做出的灵活可变的UI视图，具�
 
 <img src="/screenshots/stickyheader2.gif" style="width: 30%;"/>
 
-### 截图
+### 应用截图
 
 <table>
     <tr>
@@ -37,9 +37,15 @@ StickyHeaderListView是基于实际需求做出的灵活可变的UI视图，具�
     </tr>
 </table>
 
+<br/>
+
 ### [实现思路参考简书文章](http://www.jianshu.com/p/3bf26722c489)
 
+<br/>
+
 ### [APK下载地址](http://fir.im/StickyListView)
+
+<br/>
 
 ### 微信公众号
 
