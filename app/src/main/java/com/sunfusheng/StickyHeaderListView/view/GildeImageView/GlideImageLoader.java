@@ -84,7 +84,7 @@ public class GlideImageLoader {
 
     // 创建 Url DrawableRequestBuilder
     public DrawableRequestBuilder urlBuilder(final String url, int holderResId) {
-        if (GlideManager.getInstance().isRequestFailedUrl(url)) {
+        if (GlideManager.getInstance().isFailedUrl(url)) {
             return resBuilder(holderResId, holderResId);
         }
         return Glide.with(mImageView.getContext())
@@ -97,7 +97,7 @@ public class GlideImageLoader {
                 .listener(new RequestListener<String, GlideDrawable>() {
                     @Override
                     public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                        GlideManager.getInstance().putRequestFailedUrl(url);
+                        GlideManager.getInstance().putFailedUrl(url);
                         return false;
                     }
 

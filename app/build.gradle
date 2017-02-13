@@ -27,8 +27,8 @@ dependencies {
     compile 'com.android.support:design:25.1.1'
 
     // ButterKnife
-    compile 'com.jakewharton:butterknife:8.4.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
+    compile 'com.jakewharton:butterknife:8.5.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
 
     // Glide
     compile 'com.github.bumptech.glide:glide:3.7.0'
