@@ -9,7 +9,7 @@ import com.sunfusheng.StickyHeaderListView.R;
 /**
  * Created by sunfusheng on 16/4/20.
  */
-public class HeaderDividerView extends HeaderViewInterface<String> {
+public class HeaderDividerView extends AbsHeaderView<String> {
 
     public HeaderDividerView(Activity context) {
         super(context);

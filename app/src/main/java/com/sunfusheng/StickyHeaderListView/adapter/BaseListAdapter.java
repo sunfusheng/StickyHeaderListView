@@ -9,8 +9,8 @@ import java.util.List;
 
 public abstract class BaseListAdapter<E> extends BaseAdapter {
 
-    private List<E> mList = new ArrayList<E>();
     protected Context mContext;
+    private List<E> mList = new ArrayList<E>();
     protected LayoutInflater mInflater;
 
     public BaseListAdapter(Context context) {

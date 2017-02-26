@@ -12,7 +12,7 @@ import butterknife.ButterKnife;
 /**
  * Created by sunfusheng on 16/4/20.
  */
-public class HeaderFilterView extends HeaderViewInterface<Object> implements FilterView.OnFilterClickListener {
+public class HeaderFilterView extends AbsHeaderView<Object> implements FilterView.OnFilterClickListener {
 
     @BindView(R.id.fv_filter)
     FilterView fvFilter;

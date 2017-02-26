@@ -25,7 +25,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class HeaderBannerView extends HeaderViewInterface<List<String>> {
+public class HeaderBannerView extends AbsHeaderView<List<String>> {
 
     @BindView(R.id.vp_banner)
     ViewPager vpBanner;

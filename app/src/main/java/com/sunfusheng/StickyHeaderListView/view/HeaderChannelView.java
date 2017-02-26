@@ -18,7 +18,7 @@ import butterknife.ButterKnife;
 /**
  * Created by sunfusheng on 16/4/20.
  */
-public class HeaderChannelView extends HeaderViewInterface<List<ChannelEntity>> {
+public class HeaderChannelView extends AbsHeaderView<List<ChannelEntity>> {
 
     @BindView(R.id.gv_channel)
     FixedGridView gvChannel;

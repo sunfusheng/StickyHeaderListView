@@ -6,13 +6,13 @@ import android.widget.ListView;
 
 import java.util.List;
 
-public abstract class HeaderViewInterface<T> {
+public abstract class AbsHeaderView<T> {
 
     protected Activity mActivity;
     protected LayoutInflater mInflate;
     protected T mEntity;
 
-    public HeaderViewInterface(Activity activity) {
+    public AbsHeaderView(Activity activity) {
         this.mActivity = activity;
         mInflate = LayoutInflater.from(activity);
     }

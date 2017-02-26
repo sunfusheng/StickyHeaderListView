@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
     private HeaderDividerView headerDividerView; // 分割线占位图
     private HeaderFilterView headerFilterView; // 分类筛选视图
     private FilterData filterData; // 筛选数据
-    private TravelingAdapter mAdapter; // 主页数据
+    private TravelingAdapter mAdapter;
 
     private View itemHeaderBannerView; // 从ListView获取的广告子View
     private View itemHeaderFilterView; // 从ListView获取的筛选子View

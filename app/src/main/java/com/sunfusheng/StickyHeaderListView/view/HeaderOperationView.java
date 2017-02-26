@@ -18,7 +18,7 @@ import butterknife.ButterKnife;
 /**
  * Created by sunfusheng on 16/4/20.
  */
-public class HeaderOperationView extends HeaderViewInterface<List<OperationEntity>> {
+public class HeaderOperationView extends AbsHeaderView<List<OperationEntity>> {
 
     @BindView(R.id.gv_operation)
     FixedGridView gvOperation;
