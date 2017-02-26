@@ -1,6 +1,5 @@
 package com.sunfusheng.StickyHeaderListView.adapter;
 
-import android.content.Context;
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,23 +13,19 @@ import java.util.List;
 public class HeaderBannerAdapter extends PagerAdapter {
 
     private List<ImageView> ivList; // ImageView的集合
-    private int count = 1; // 广告的数量
+    private int count; // 广告的数量
 
-    public HeaderBannerAdapter(Context context, List<ImageView> ivList) {
+    public HeaderBannerAdapter(List<ImageView> ivList) {
         super();
         this.ivList = ivList;
-        if(ivList != null && ivList.size() > 0){
+        if(ivList != null){
             count = ivList.size();
         }
     }
 
     @Override
     public int getCount() {
-        if (count == 1) {
-            return 1;
-        } else {
-            return Integer.MAX_VALUE;
-        }
+        return Integer.MAX_VALUE;
     }
 
     @Override
@@ -45,7 +40,7 @@ public class HeaderBannerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         int newPosition = position % count;
-        // 先移除在添加，更新图片在container中的位置（把iv放至container末尾）
+        // 先移除再添加，更新图片在container中的位置（把iv放至container末尾）
         ImageView iv = ivList.get(newPosition);
         container.removeView(iv);
         container.addView(iv);

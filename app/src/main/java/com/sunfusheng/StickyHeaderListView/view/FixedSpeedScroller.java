@@ -29,12 +29,8 @@ public class FixedSpeedScroller extends Scroller {
         super.startScroll(startX, startY, dx, dy, mDuration);
     }
 
-    public void setmDuration(int time) {
+    public void setDuration(int time) {
         mDuration = time;
-    }
-
-    public int getmDuration() {
-        return mDuration;
     }
 
 }

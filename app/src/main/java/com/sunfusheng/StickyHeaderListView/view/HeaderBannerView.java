@@ -68,20 +68,20 @@ public class HeaderBannerView extends AbsHeaderView<List<String>> {
 
     private void dealWithTheView(List<String> list) {
         ivList.clear();
+
         bannerCount = list.size();
         if (bannerCount == 2) {
             list.addAll(list);
-        }
-        for (int i = 0; i < list.size(); i++) {
-            ivList.add(createImageView(list.get(i)));
         }
 
         AbsListView.LayoutParams layoutParams = (AbsListView.LayoutParams) rlBanner.getLayoutParams();
         layoutParams.height = bannerHeight;
         rlBanner.setLayoutParams(layoutParams);
 
-        HeaderBannerAdapter photoAdapter = new HeaderBannerAdapter(mActivity, ivList);
-        vpBanner.setAdapter(photoAdapter);
+        createImageViews(list);
+
+        HeaderBannerAdapter adapter = new HeaderBannerAdapter(ivList);
+        vpBanner.setAdapter(adapter);
 
         addIndicatorImageViews();
         setViewPagerChangeListener();
@@ -89,13 +89,15 @@ public class HeaderBannerView extends AbsHeaderView<List<String>> {
     }
 
     // 创建要显示的ImageView
-    private ImageView createImageView(String url) {
-        GlideImageView imageView = new GlideImageView(mActivity);
-        AbsListView.LayoutParams params = new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        imageView.setLayoutParams(params);
-        imageView.loadNetImage(url, R.color.font_black_6);
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        return imageView;
+    private void createImageViews(List<String> list) {
+        for (int i = 0; i < list.size(); i++) {
+            GlideImageView imageView = new GlideImageView(mActivity);
+            AbsListView.LayoutParams params = new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            imageView.setLayoutParams(params);
+            imageView.loadNetImage(list.get(i), R.color.font_black_6);
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            ivList.add(imageView);
+        }
     }
 
     // 添加指示图标
@@ -105,15 +107,10 @@ public class HeaderBannerView extends AbsHeaderView<List<String>> {
         for (int i = 0; i < bannerCount; i++) {
             ImageView iv = new ImageView(mActivity);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(DensityUtil.dip2px(mActivity, 5), DensityUtil.dip2px(mActivity, 5));
-            if (i != 0) {
-                lp.leftMargin = DensityUtil.dip2px(mActivity, 7);
-            }
+            lp.leftMargin = DensityUtil.dip2px(mActivity, (i == 0) ? 0 : 7);
             iv.setLayoutParams(lp);
             iv.setBackgroundResource(R.drawable.xml_round_orange_grey_sel);
-            iv.setEnabled(false);
-            if (i == 0) {
-                iv.setEnabled(true);
-            }
+            iv.setEnabled(i == 0);
             llIndexContainer.addView(iv);
         }
     }
@@ -123,14 +120,10 @@ public class HeaderBannerView extends AbsHeaderView<List<String>> {
         vpBanner.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
-                if (ivList != null && ivList.size() > 0) {
-                    int newPosition = position % bannerCount;
-                    for (int i = 0; i < bannerCount; i++) {
-                        llIndexContainer.getChildAt(i).setEnabled(false);
-                        if (i == newPosition) {
-                            llIndexContainer.getChildAt(i).setEnabled(true);
-                        }
-                    }
+                if (ivList == null || ivList.size() == 0) return;
+                int newPosition = position % bannerCount;
+                for (int i = 0; i < bannerCount; i++) {
+                    llIndexContainer.getChildAt(i).setEnabled(i == newPosition);
                 }
             }
 
@@ -163,13 +156,10 @@ public class HeaderBannerView extends AbsHeaderView<List<String>> {
             Field field = ViewPager.class.getDeclaredField("mScroller");
             field.setAccessible(true);
             FixedSpeedScroller scroller = new FixedSpeedScroller(mActivity, new AccelerateDecelerateInterpolator());
-            scroller.setmDuration(speedTimeMillis);
+            scroller.setDuration(speedTimeMillis);
             field.set(viewPager, scroller);
         } catch (Exception e) {
         }
     }
 
-    public int getBannerHeight() {
-        return bannerHeight;
-    }
 }
