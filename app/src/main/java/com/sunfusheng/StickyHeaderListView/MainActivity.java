@@ -1,4 +1,4 @@
-package com.sunfusheng.StickyHeaderListView.ui;
+package com.sunfusheng.StickyHeaderListView;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,7 +12,6 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.sunfusheng.StickyHeaderListView.R;
 import com.sunfusheng.StickyHeaderListView.adapter.TravelingAdapter;
 import com.sunfusheng.StickyHeaderListView.model.ChannelEntity;
 import com.sunfusheng.StickyHeaderListView.model.FilterData;
@@ -165,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
         });
 
         // (假的ListView头部展示的)筛选视图点击
-        headerFilterView.setOnFilterClickListener(new HeaderFilterView.OnFilterClickListener() {
+        headerFilterView.getFilterView().setOnFilterClickListener(new FilterView.OnFilterClickListener() {
             @Override
             public void onFilterClick(int position) {
                 filterPosition = position;
@@ -230,7 +229,7 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
 
                 // 获取广告头部View、自身的高度、距离顶部的高度
                 if (itemHeaderBannerView == null) {
-                    itemHeaderBannerView = smoothListView.getChildAt(1-firstVisibleItem);
+                    itemHeaderBannerView = smoothListView.getChildAt(1);
                 }
                 if (itemHeaderBannerView != null) {
                     bannerViewTopMargin = DensityUtil.px2dip(mContext, itemHeaderBannerView.getTop());
@@ -268,11 +267,9 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
     // 填充数据
     private void fillAdapter(List<TravelingEntity> list) {
         if (list == null || list.size() == 0) {
-            smoothListView.setLoadMoreEnable(false);
             int height = mScreenHeight - DensityUtil.dip2px(mContext, 95); // 95 = 标题栏高度 ＋ FilterView的高度
             mAdapter.setData(ModelUtil.getNoDataEntity(height));
         } else {
-            smoothListView.setLoadMoreEnable(list.size() > TravelingAdapter.ONE_REQUEST_COUNT);
             mAdapter.setData(list);
         }
     }

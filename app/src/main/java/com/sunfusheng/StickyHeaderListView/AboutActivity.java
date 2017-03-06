@@ -1,4 +1,4 @@
-package com.sunfusheng.StickyHeaderListView.ui;
+package com.sunfusheng.StickyHeaderListView;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -16,8 +16,6 @@ import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-
-import com.sunfusheng.StickyHeaderListView.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

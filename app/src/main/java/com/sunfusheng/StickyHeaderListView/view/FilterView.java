@@ -149,7 +149,7 @@ public class FilterView extends LinearLayout implements View.OnClickListener {
     }
 
     // 复位筛选的显示状态
-    public void resetFilterStatus() {
+    public void resetViewStatus() {
         tvCategoryTitle.setTextColor(mContext.getResources().getColor(R.color.font_black_2));
         ivCategoryArrow.setImageResource(R.mipmap.home_down_arrow);
 
@@ -162,7 +162,7 @@ public class FilterView extends LinearLayout implements View.OnClickListener {
 
     // 复位所有的状态
     public void resetAllStatus() {
-        resetFilterStatus();
+        resetViewStatus();
         hide();
     }
 
@@ -253,8 +253,23 @@ public class FilterView extends LinearLayout implements View.OnClickListener {
 
     // 动画显示
     public void show(int position) {
-        if (isShowing && lastFilterPosition == position) return;
-        resetFilterStatus();
+        if (isShowing && lastFilterPosition == position) {
+            hide();
+            return;
+        } else if (!isShowing) {
+            viewMaskBg.setVisibility(VISIBLE);
+            llContentListView.setVisibility(VISIBLE);
+            llContentListView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    llContentListView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                    panelHeight = llContentListView.getHeight();
+                    ObjectAnimator.ofFloat(llContentListView, "translationY", -panelHeight, 0).setDuration(200).start();
+                }
+            });
+        }
+        isShowing = true;
+        resetViewStatus();
         rotateArrowUp(position);
         rotateArrowDown(lastFilterPosition);
         lastFilterPosition = position;
@@ -276,31 +291,33 @@ public class FilterView extends LinearLayout implements View.OnClickListener {
                 setFilterAdapter();
                 break;
         }
-
-        if (isShowing) return ;
-        isShowing = true;
-        viewMaskBg.setVisibility(VISIBLE);
-        llContentListView.setVisibility(VISIBLE);
-        llContentListView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                llContentListView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                panelHeight = llContentListView.getHeight();
-                ObjectAnimator.ofFloat(llContentListView, "translationY", -panelHeight, 0).setDuration(200).start();
-            }
-        });
     }
 
     // 隐藏动画
     public void hide() {
         isShowing = false;
-        resetFilterStatus();
+        resetViewStatus();
         rotateArrowDown(filterPosition);
         rotateArrowDown(lastFilterPosition);
         filterPosition = -1;
         lastFilterPosition = -1;
         viewMaskBg.setVisibility(View.GONE);
         ObjectAnimator.ofFloat(llContentListView, "translationY", 0, -panelHeight).setDuration(200).start();
+    }
+
+    // 设置筛选数据
+    public void setFilterData(Activity activity, FilterData filterData) {
+        this.mActivity = activity;
+        this.filterData = filterData;
+    }
+
+    // 是否显示
+    public boolean isShowing() {
+        return isShowing;
+    }
+
+    public int getFilterPosition() {
+        return filterPosition;
     }
 
     // 旋转箭头向上
@@ -339,18 +356,6 @@ public class FilterView extends LinearLayout implements View.OnClickListener {
         RotateAnimation animation = new RotateAnimation(0f, 180f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         animation.setDuration(200);
         animation.setFillAfter(true);
-        animation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {}
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-            }
-        });
         iv.startAnimation(animation);
     }
 
@@ -360,34 +365,7 @@ public class FilterView extends LinearLayout implements View.OnClickListener {
         RotateAnimation animation = new RotateAnimation(180f, 0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         animation.setDuration(200);
         animation.setFillAfter(true);
-        animation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {}
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-            }
-        });
         iv.startAnimation(animation);
-    }
-
-    // 设置筛选数据
-    public void setFilterData(Activity activity, FilterData filterData) {
-        this.mActivity = activity;
-        this.filterData = filterData;
-    }
-
-    // 是否显示
-    public boolean isShowing() {
-        return isShowing;
-    }
-
-    public int getFilterPosition() {
-        return filterPosition;
     }
 
     // 筛选视图点击
