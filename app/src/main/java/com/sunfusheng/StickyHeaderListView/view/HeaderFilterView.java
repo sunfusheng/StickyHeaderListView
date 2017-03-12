@@ -14,8 +14,9 @@ import butterknife.ButterKnife;
  */
 public class HeaderFilterView extends AbsHeaderView<Object> {
 
-    @BindView(R.id.fv_filter)
-    FilterView fvFilter;
+
+    @BindView(R.id.fake_filterView)
+    FilterView fakeFilterView;
 
     public HeaderFilterView(Activity context) {
         super(context);
@@ -29,7 +30,7 @@ public class HeaderFilterView extends AbsHeaderView<Object> {
     }
 
     public FilterView getFilterView() {
-        return fvFilter;
+        return fakeFilterView;
     }
 
 }

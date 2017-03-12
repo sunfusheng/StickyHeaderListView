@@ -75,7 +75,7 @@
         </RelativeLayout>
 
         <com.sunfusheng.StickyHeaderListView.view.FilterView
-            android:id="@+id/filterView"
+            android:id="@+id/real_filterView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"/>

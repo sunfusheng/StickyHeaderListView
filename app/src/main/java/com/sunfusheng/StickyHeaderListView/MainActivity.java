@@ -39,15 +39,15 @@ import butterknife.ButterKnife;
 
 /**
  * 作者：孙福生
- *
+ * <p>
  * 个人博客：sunfusheng.com
  */
 public class MainActivity extends AppCompatActivity implements SmoothListView.ISmoothListViewListener {
 
     @BindView(R.id.listView)
     SmoothListView smoothListView;
-    @BindView(R.id.filterView)
-    FilterView filterView;
+    @BindView(R.id.real_filterView)
+    FilterView realFilterView;
     @BindView(R.id.rl_bar)
     RelativeLayout rlBar;
     @BindView(R.id.tv_title)
@@ -76,19 +76,19 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
     private FilterData filterData; // 筛选数据
     private TravelingAdapter mAdapter;
 
-    private View itemHeaderBannerView; // 从ListView获取的广告子View
-    private View itemHeaderFilterView; // 从ListView获取的筛选子View
-    private boolean isScrollIdle = true; // ListView是否在滑动
-    private boolean isStickyTop = false; // 是否吸附在顶部
-    private boolean isSmooth = false; // 没有吸附的前提下，是否在滑动
     private int titleViewHeight = 65; // 标题栏的高度
-    private int filterPosition = -1; // 点击FilterView的位置：分类(0)、排序(1)、筛选(2)
 
+    private View itemHeaderBannerView; // 从ListView获取的广告子View
     private int bannerViewHeight = 180; // 广告视图的高度
     private int bannerViewTopMargin; // 广告视图距离顶部的距离
 
+    private View itemHeaderFilterView; // 从ListView获取的筛选子View
     private int filterViewPosition = 4; // 筛选视图的位置
     private int filterViewTopMargin; // 筛选视图距离顶部的距离
+    private boolean isScrollIdle = true; // ListView是否在滑动
+    private boolean isStickyTop = false; // 是否吸附在顶部
+    private boolean isSmooth = false; // 没有吸附的前提下，是否在滑动
+    private int filterPosition = -1; // 点击FilterView的位置：分类(0)、排序(1)、筛选(2)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,8 +144,8 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
         headerFilterView.fillView(new Object(), smoothListView);
 
         // 设置真FilterView数据
-        filterView.setFilterData(mActivity, filterData);
-        filterView.setVisibility(View.GONE);
+        realFilterView.setFilterData(mActivity, filterData);
+        realFilterView.setVisibility(View.GONE);
 
         // 设置ListView数据
         mAdapter = new TravelingAdapter(this, travelingList);
@@ -174,21 +174,17 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
         });
 
         // (真正的)筛选视图点击
-        filterView.setOnFilterClickListener(new FilterView.OnFilterClickListener() {
+        realFilterView.setOnFilterClickListener(new FilterView.OnFilterClickListener() {
             @Override
             public void onFilterClick(int position) {
-                if (isStickyTop) {
-                    filterPosition = position;
-                    filterView.show(position);
-                    if (titleViewHeight - 3 > filterViewTopMargin || filterViewTopMargin > titleViewHeight + 3) {
-                        smoothListView.smoothScrollToPositionFromTop(filterViewPosition, DensityUtil.dip2px(mContext, titleViewHeight));
-                    }
-                }
+                filterPosition = position;
+                realFilterView.show(position);
+                smoothListView.smoothScrollToPositionFromTop(filterViewPosition, DensityUtil.dip2px(mContext, titleViewHeight));
             }
         });
 
         // 分类Item点击
-        filterView.setOnItemCategoryClickListener(new FilterView.OnItemCategoryClickListener() {
+        realFilterView.setOnItemCategoryClickListener(new FilterView.OnItemCategoryClickListener() {
             @Override
             public void onItemCategoryClick(FilterTwoEntity leftEntity, FilterEntity rightEntity) {
                 fillAdapter(ModelUtil.getCategoryTravelingData(leftEntity, rightEntity));
@@ -196,7 +192,7 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
         });
 
         // 排序Item点击
-        filterView.setOnItemSortClickListener(new FilterView.OnItemSortClickListener() {
+        realFilterView.setOnItemSortClickListener(new FilterView.OnItemSortClickListener() {
             @Override
             public void onItemSortClick(FilterEntity entity) {
                 fillAdapter(ModelUtil.getSortTravelingData(entity));
@@ -204,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
         });
 
         // 筛选Item点击
-        filterView.setOnItemFilterClickListener(new FilterView.OnItemFilterClickListener() {
+        realFilterView.setOnItemFilterClickListener(new FilterView.OnItemFilterClickListener() {
             @Override
             public void onItemFilterClick(FilterEntity entity) {
                 fillAdapter(ModelUtil.getFilterTravelingData(entity));
@@ -216,7 +212,8 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
         smoothListView.setSmoothListViewListener(this);
         smoothListView.setOnScrollListener(new SmoothListView.OnSmoothScrollListener() {
             @Override
-            public void onSmoothScrolling(View view) {}
+            public void onSmoothScrolling(View view) {
+            }
 
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -247,15 +244,15 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
                 // 处理筛选是否吸附在顶部
                 if (filterViewTopMargin <= titleViewHeight || firstVisibleItem > filterViewPosition) {
                     isStickyTop = true; // 吸附在顶部
-                    filterView.setVisibility(View.VISIBLE);
+                    realFilterView.setVisibility(View.VISIBLE);
                 } else {
                     isStickyTop = false; // 没有吸附在顶部
-                    filterView.setVisibility(View.GONE);
+                    realFilterView.setVisibility(View.GONE);
                 }
 
                 if (isSmooth && isStickyTop) {
                     isSmooth = false;
-                    filterView.show(filterPosition);
+                    realFilterView.show(filterPosition);
                 }
 
                 // 处理标题栏颜色渐变
@@ -281,7 +278,7 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
             fraction = 1f - bannerViewTopMargin * 1f / 60;
             if (fraction < 0f) fraction = 0f;
             rlBar.setAlpha(fraction);
-            return ;
+            return;
         }
 
         float space = Math.abs(bannerViewTopMargin) * 1f;
@@ -316,10 +313,10 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
 
     @Override
     public void onBackPressed() {
-        if (!filterView.isShowing()) {
-            super.onBackPressed();
+        if (realFilterView.isShowing()) {
+            realFilterView.resetAllStatus();
         } else {
-            filterView.resetAllStatus();
+            super.onBackPressed();
         }
     }
 
