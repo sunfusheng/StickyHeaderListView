@@ -7,7 +7,6 @@ import android.content.Context;
  */
 public class ColorUtil {
 
-
     // 合成新的颜色值
     public static int getNewColorByStartEndColor(Context context, float fraction, int startValue, int endValue) {
         return evaluate(fraction, context.getResources().getColor(startValue), context.getResources().getColor(endValue));
