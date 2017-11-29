@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.sunfusheng.StickyHeaderListView.R;
 import com.sunfusheng.StickyHeaderListView.model.TravelingEntity;
 import com.sunfusheng.StickyHeaderListView.util.ToastUtil;
-import com.sunfusheng.StickyHeaderListView.view.GildeImageView.GlideImageView;
+import com.sunfusheng.glideimageview.GlideImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,7 +99,7 @@ public class TravelingAdapter extends BaseListAdapter<TravelingEntity> {
         final String title = entity.getFrom() + entity.getTitle() + entity.getType();
         holder.tvTitle.setText(title);
         holder.tvRank.setText("排名：" + entity.getRank());
-        holder.givImage.loadNetImage(entity.getImage_url(), R.color.font_black_6);
+        holder.givImage.loadImage(entity.getImage_url(), R.color.font_black_6);
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override

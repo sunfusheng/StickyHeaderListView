@@ -13,7 +13,7 @@
             android:background="@drawable/ripple_item_clicked"
             android:padding="10dp">
 
-            <com.sunfusheng.StickyHeaderListView.view.GildeImageView.GlideImageView
+            <com.sunfusheng.glideimageview.GlideImageView
                 android:id="@+id/giv_image"
                 android:layout_width="80dp"
                 android:layout_height="60dp"

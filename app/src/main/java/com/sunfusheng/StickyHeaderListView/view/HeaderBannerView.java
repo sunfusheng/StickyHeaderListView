@@ -16,7 +16,7 @@ import android.widget.RelativeLayout;
 import com.sunfusheng.StickyHeaderListView.R;
 import com.sunfusheng.StickyHeaderListView.adapter.HeaderBannerAdapter;
 import com.sunfusheng.StickyHeaderListView.util.DensityUtil;
-import com.sunfusheng.StickyHeaderListView.view.GildeImageView.GlideImageView;
+import com.sunfusheng.glideimageview.GlideImageView;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -94,7 +94,7 @@ public class HeaderBannerView extends AbsHeaderView<List<String>> {
             GlideImageView imageView = new GlideImageView(mActivity);
             AbsListView.LayoutParams params = new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             imageView.setLayoutParams(params);
-            imageView.loadNetImage(list.get(i), R.color.font_black_6);
+            imageView.loadImage(list.get(i), R.color.font_black_6);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             ivList.add(imageView);
         }

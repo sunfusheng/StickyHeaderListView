@@ -6,7 +6,7 @@
     android:background="@drawable/ripple_item_clicked_with_mask"
     android:minHeight="72.5dp">
 
-    <com.sunfusheng.StickyHeaderListView.view.GildeImageView.GlideImageView
+    <com.sunfusheng.glideimageview.GlideImageView
         android:id="@+id/giv_image"
         android:layout_width="60dp"
         android:layout_height="60dp"

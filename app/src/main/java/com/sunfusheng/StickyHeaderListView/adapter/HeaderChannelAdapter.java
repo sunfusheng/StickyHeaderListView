@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.sunfusheng.StickyHeaderListView.R;
 import com.sunfusheng.StickyHeaderListView.model.ChannelEntity;
-import com.sunfusheng.StickyHeaderListView.view.GildeImageView.GlideImageView;
+import com.sunfusheng.glideimageview.GlideImageView;
 
 import java.util.List;
 
@@ -38,7 +38,7 @@ public class HeaderChannelAdapter extends BaseListAdapter<ChannelEntity> {
         ChannelEntity entity = getItem(position);
 
         holder.tvTitle.setText(entity.getTitle());
-        holder.givImage.loadNetCircleImage(entity.getImage_url(), R.color.font_black_6);
+        holder.givImage.loadImage(entity.getImage_url(), R.color.font_black_6);
 
         if (TextUtils.isEmpty(entity.getTips())) {
             holder.tvTips.setVisibility(View.INVISIBLE);
