@@ -33,7 +33,11 @@ StickyHeaderListView是基于实际需求做出的灵活可变的UI视图，具�
 
 <br/>
 
-### [APK下载地址](http://fir.im/StickyListView)
+### 扫一扫[Fir.im](https://fir.im/StickyListView)二维码下载APK
+
+<br/>
+
+<img src="/resources/fir.im.png" style="width: 30%;" alt="s">
 
 <br/>
 
