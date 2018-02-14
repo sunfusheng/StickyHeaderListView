@@ -2,15 +2,15 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.jakewharton.butterknife'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '26.0.2'
+    compileSdkVersion gradle.compileSdkVersion
+    buildToolsVersion gradle.buildToolsVersion
 
     defaultConfig {
         applicationId "com.sunfusheng.StickyHeaderListView"
-        minSdkVersion 14
-        targetSdkVersion 26
-        versionCode 8
-        versionName "1.7"
+        minSdkVersion gradle.minSdkVersion
+        targetSdkVersion gradle.targetSdkVersion
+        versionCode gradle.versionCode
+        versionName gradle.versionName
     }
 
     buildTypes {
@@ -22,14 +22,12 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:26.1.0'
-    compile 'com.android.support:design:26.1.0'
-
-    // ButterKnife
-    compile 'com.jakewharton:butterknife:8.8.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:' + gradle.supportLibraryVersion
+    implementation 'com.android.support:design:' + gradle.supportLibraryVersion
+    implementation 'com.jakewharton:butterknife:8.4.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
 
     // GlideImageView
-    compile 'com.sunfusheng:glideimageview:1.2.0'
+    implementation 'com.sunfusheng:glideimageview:1.2.0'
 }
