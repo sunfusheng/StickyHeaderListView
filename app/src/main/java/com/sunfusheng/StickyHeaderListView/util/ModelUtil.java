@@ -30,7 +30,7 @@ public class ModelUtil {
         adList.add("http://img2.imgtn.bdimg.com/it/u=2850936076,2080165544&fm=206&gp=0.jpg");
         adList.add("http://img3.imgtn.bdimg.com/it/u=524208507,12616758&fm=206&gp=0.jpg");
         adList.add("http://img3.imgtn.bdimg.com/it/u=698582197,4250615262&fm=206&gp=0.jpg");
-        adList.add("http://img5.imgtn.bdimg.com/it/u=1467751238,3257336851&fm=11&gp=0.jpg");
+        adList.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1519377816881&di=47c3c5f8f8e2010ac37d2267736a79a2&imgtype=0&src=http%3A%2F%2Fwww.fansimg.com%2Fportal%2F201406%2F10%2F105328z4xjovysf2kbkyfh.jpg.thumb.jpg");
         return adList;
     }
 
@@ -40,7 +40,7 @@ public class ModelUtil {
         channelList.add(new ChannelEntity("中国", "天安门", "http://img2.imgtn.bdimg.com/it/u=2850936076,2080165544&fm=206&gp=0.jpg"));
         channelList.add(new ChannelEntity("美国", "白宫", "http://img3.imgtn.bdimg.com/it/u=524208507,12616758&fm=206&gp=0.jpg"));
         channelList.add(new ChannelEntity("英国", "伦敦塔桥", "http://img3.imgtn.bdimg.com/it/u=698582197,4250615262&fm=206&gp=0.jpg"));
-        channelList.add(new ChannelEntity("德国", "城堡", "http://img5.imgtn.bdimg.com/it/u=1467751238,3257336851&fm=11&gp=0.jpg"));
+        channelList.add(new ChannelEntity("德国", "城堡", "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1519377816881&di=47c3c5f8f8e2010ac37d2267736a79a2&imgtype=0&src=http%3A%2F%2Fwww.fansimg.com%2Fportal%2F201406%2F10%2F105328z4xjovysf2kbkyfh.jpg.thumb.jpg"));
         channelList.add(new ChannelEntity("西班牙", "巴塞罗那", "http://img5.imgtn.bdimg.com/it/u=3191365283,111438732&fm=21&gp=0.jpg"));
         channelList.add(new ChannelEntity("意大利", "比萨斜塔", "http://img5.imgtn.bdimg.com/it/u=482494496,1350922497&fm=206&gp=0.jpg"));
         return channelList;

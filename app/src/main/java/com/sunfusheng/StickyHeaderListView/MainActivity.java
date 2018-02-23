@@ -12,6 +12,7 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.sunfusheng.FirUpdater;
 import com.sunfusheng.StickyHeaderListView.adapter.TravelingAdapter;
 import com.sunfusheng.StickyHeaderListView.model.ChannelEntity;
 import com.sunfusheng.StickyHeaderListView.model.FilterData;
@@ -95,7 +96,9 @@ public class MainActivity extends AppCompatActivity implements SmoothListView.IS
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        StatusBarUtil.setStatusBarTranslucent(this, false);
+        StatusBarUtil.setStatusBarTranslucent(this, true);
+
+        new FirUpdater(this, "3c57fb226edf7facf821501e4eba08d2", "571dd00b00fc74312e00001f").checkVersion();
 
         initData();
         initView();

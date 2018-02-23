@@ -1,6 +1,9 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.jakewharton.butterknife'
 
+Properties signingProperties = new Properties()
+signingProperties.load(new FileInputStream(file("../signings/signing.properties")))
+
 android {
     compileSdkVersion gradle.compileSdkVersion
     buildToolsVersion gradle.buildToolsVersion
@@ -13,10 +16,46 @@ android {
         versionName gradle.versionName
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    signingConfigs {
+        release {
+            storeFile file(signingProperties['KEYSTORE_FILEPATH'])
+            storePassword signingProperties['STORE_PASSWORD']
+            keyAlias signingProperties['KEY_ALIAS']
+            keyPassword signingProperties['KEY_PASSWORD']
+        }
+    }
+
     buildTypes {
         release {
-            minifyEnabled false
+            buildConfigField "boolean", "debugMode", "false"
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            applicationVariants.all {
+                variant -> generateApk(variant)
+            }
+        }
+
+        debug {
+            buildConfigField "boolean", "debugMode", "true"
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            applicationVariants.all {
+                variant -> generateApk(variant)
+            }
+        }
+    }
+}
+
+def generateApk(variant) {
+    if (variant.buildType.name == "release") {
+        variant.getPackageApplication().outputDirectory = new File(project.rootDir.absolutePath + "/app/outputs")
+        variant.getPackageApplication().outputScope.apkDatas.forEach { apkData ->
+            apkData.outputFileName = "SHLV.apk"
         }
     }
 }
@@ -28,6 +67,6 @@ dependencies {
     implementation 'com.jakewharton:butterknife:8.4.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
 
-    // GlideImageView
+    implementation 'com.sunfusheng:FirUpdater:1.0.7'
     implementation 'com.sunfusheng:glideimageview:1.2.0'
 }
