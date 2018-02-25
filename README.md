@@ -35,19 +35,21 @@ StickyHeaderListView是基于实际需求做出的灵活可变的UI视图，具�
 
 ### 扫一扫[Fir.im](https://fir.im/StickyListView)二维码下载APK
 
-<br/>
-
 <img src="/resources/fir.im.png" style="width: 30%;" alt="s">
 
 <br/>
 
-### 关注我吧，让我们做朋友^_^
+### 个人微信公众号
 
-<img src="http://ourvm0t8d.bkt.clouddn.com/follow_me.png">
+<img src="http://ourvm0t8d.bkt.clouddn.com/wx_gongzhonghao.png">
 
-### 打个赏吧，给作者加点油^_^
+<br/>
 
-<img src="http://ourvm0t8d.bkt.clouddn.com/reward_me.png" >
+### 打点赏给作者加点油^_^
+
+<img src="http://ourvm0t8d.bkt.clouddn.com/wx_shoukuanma.png" >
+
+<br/>
 
 ### 关于我
 
@@ -60,7 +62,4 @@ StickyHeaderListView是基于实际需求做出的灵活可变的UI视图，具�
 [简书主页](http://www.jianshu.com/users/88509e7e2ed1/latest_articles)
   
 [新浪微博](http://weibo.com/u/3852192525) 
-
-
-
 
