@@ -6,8 +6,6 @@ signingProperties.load(new FileInputStream(file("../signings/signing.properties"
 
 android {
     compileSdkVersion gradle.compileSdkVersion
-    buildToolsVersion gradle.buildToolsVersion
-
     defaultConfig {
         applicationId "com.sunfusheng.StickyHeaderListView"
         minSdkVersion gradle.minSdkVersion
@@ -19,6 +17,12 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    lintOptions {
+        quiet true
+        abortOnError false
+        ignoreWarnings true
     }
 
     signingConfigs {
